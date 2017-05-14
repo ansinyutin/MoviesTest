@@ -12,12 +12,64 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
-
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        if window == nil {
+            window = UIWindow(frame: UIScreen.main.bounds)
+            window?.backgroundColor = UIColor.white
+        }
+        
+        
+        
+//        let vc = MainListVC()
+//        let nvc = UINavigationController(rootViewController: vc)
+        
+//        vc.view.frame = window!.frame
+        
+//        window!.translatesAutoresizingMaskIntoConstraints = false
+//        window!.rootViewController = nvc
+//        window!.rootViewController = vc
+        window!.rootViewController = getActorVC()
+        window!.makeKeyAndVisible()
+        
+        setupInjection()
+        
         return true
     }
+    
+    func setupInjection() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(onInjection),
+                                               name: Notification.Name("INJECTION_BUNDLE_NOTIFICATION"),
+                                               object: nil)
+    }
+    
+    @objc func onInjection() {
+        
+        print("injected")
+        
+//        let vc = MainListVC()
+//        let nvc = UINavigationController(rootViewController: vc)
+        let vc = getActorVC()
+        
+        self.window?.rootViewController = vc
+    }
+    
+    func getActorVC() -> ActorVC {
+        
+        let vc = ActorVC()
+        
+        vc.setupWithActor(name: "Willem Dafoe",
+                          professions: ["Actor", "Director"],
+                          moviesWatched: 178,
+                          allMovies: 298,
+                          fans: 89,
+                          rate: 7.3)
+        
+        return vc
+    }
+
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
