@@ -426,7 +426,6 @@ class ActorVC: UIViewController, ActorDetailsVCPanDelegate{
         detailVC.didMove(toParentViewController: self)
         
         detailVC.list.isScrollEnabled = false
-        detailVC.enablePanRecognizer(isEnabled: false)
         
         addCustomConstraints()
     }

@@ -102,12 +102,6 @@ class ActorDetailsVC: UIViewController, UICollectionViewDataSource, UICollection
         self.view.addSubview(header)
     }
     
-    func setupEvents() {
-//        self.panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(onPan))
-//        self.view.addGestureRecognizer(self.panRecognizer)
-    }
-    
-    
     func addCustomConstraints() {
         
         let metrics:[String:Any] = [
@@ -150,11 +144,6 @@ class ActorDetailsVC: UIViewController, UICollectionViewDataSource, UICollection
     
     //MARK:- Scroll handling
     
-    func enablePanRecognizer(isEnabled:Bool) {
-        print("DETAL RECOGNIZER: \(isEnabled)")
-//        self.panRecognizer.isEnabled = isEnabled
-    }
-    
     func canHandlePan(offset:CGPoint) -> Bool {
         
         if isTopReached() && offset.y < 0 {
@@ -165,43 +154,12 @@ class ActorDetailsVC: UIViewController, UICollectionViewDataSource, UICollection
     }
         
     func isTopReached() -> Bool {
-        //TODO header measurements
         return self.list.contentOffset.y <= self.minOffset
     }
     
     func isBottomReached() -> Bool {
         return self.list.contentOffset.y >= self.maxOffset
     }
-    
-//    func onPan(recognizer:UIPanGestureRecognizer) {
-//        
-//        let offset:CGPoint = recognizer.translation(in: self.view)
-//        let velocity = recognizer.velocity(in: self.view)
-//        
-//        switch recognizer.state {
-//        case .began:
-//            
-//            self.onPanBegin(offset: offset)
-//            
-//        case .changed:
-//            
-//            let newListOffsetY =  self.initialOffset + offset.y;
-//            let newListOffset = CGPoint(x: 0, y: newListOffsetY)
-//            
-//            self.onPanChange(offset: newListOffset)
-//            
-//        case .cancelled:
-//            print("\nFailed\n")
-//        case .failed:
-//            print("\nFailed\n")
-//        case .ended:
-//            
-//            self.onPanEnd(offset: offset, velocity: velocity)
-//            
-//        default: break
-//        }
-//        
-//    }
     
     func onPanBegin(offset: CGPoint) {
         refreshInitialOffset()
@@ -264,7 +222,6 @@ class ActorDetailsVC: UIViewController, UICollectionViewDataSource, UICollection
     
     func refreshInitialOffset() {
         self.initialOffset = self.list.contentOffset.y
-//        self.lastOffset = offset
     }
     
     func scrollList(withVelocity velocity:CGFloat) {
