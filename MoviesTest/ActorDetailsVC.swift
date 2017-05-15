@@ -11,7 +11,7 @@ import pop
 
 
 protocol ActorDetailsVCPanDelegate:class {
-    func onActorDetailPanChange(offset:CGPoint)
+    func onActorDetailPanChange(offset:CGPoint, updateInitialDetailOffset: Bool)
     func onActorDetailPanEnd(offset:CGPoint, velocity:CGPoint)
     func onActorDetailPanAnimationEnd(velocity:CGPoint)
 }
@@ -65,7 +65,6 @@ class ActorDetailsVC: UIViewController, UICollectionViewDataSource, UICollection
         
         setupList()
         setupHeader()
-        setupEvents()
        
         refresh()
         
@@ -144,6 +143,20 @@ class ActorDetailsVC: UIViewController, UICollectionViewDataSource, UICollection
     
     //MARK:- Scroll handling
     
+    
+//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        super.touchesBegan(touches, with: event)
+//        
+//        stopAnimations()
+//        onPanChange(offset: CGPoint(x:0, y:0))
+//    }
+    
+    
+    func stopAnimations() {
+        list.pop_removeAllAnimations()
+        refreshInitialOffset()
+    }
+    
     func canHandlePan(offset:CGPoint) -> Bool {
         
         if isTopReached() && offset.y < 0 {
@@ -165,7 +178,9 @@ class ActorDetailsVC: UIViewController, UICollectionViewDataSource, UICollection
         refreshInitialOffset()
         self.list.pop_removeAllAnimations()
         
-        print("detail pan BEGIN ini: \(self.initialOffset)")
+        print(
+            "DETAIL STR ini: \(self.initialOffset)\t" +
+                "off: \(offset.y)")
     }
     
     func onPanChange(offset:CGPoint, isSkipTopCheck: Bool = false) {
@@ -174,9 +189,9 @@ class ActorDetailsVC: UIViewController, UICollectionViewDataSource, UICollection
         let isTopEdgeReached = newListOffset < minOffset
         
         print(
-            "DETAIL PAN ini: \(self.initialOffset) " +
-            "off: \(offset.y) " +
-            "new: \(newListOffset) " +
+            "DETAIL PAN ini: \(self.initialOffset)\t" +
+            "off: \(offset.y)\t" +
+            "new: \(newListOffset)\t" +
             "topReached: \(isTopEdgeReached)")
         
         if isTopEdgeReached {
@@ -184,7 +199,7 @@ class ActorDetailsVC: UIViewController, UICollectionViewDataSource, UICollection
             let outerOffsetY = newListOffset - minOffset
             let outerOffset = CGPoint(x:0, y:outerOffsetY)
             
-            panDelegate?.onActorDetailPanChange(offset: outerOffset)
+            panDelegate?.onActorDetailPanChange(offset: outerOffset, updateInitialDetailOffset: true)
             
             //TODO start head deformation
             
@@ -203,7 +218,11 @@ class ActorDetailsVC: UIViewController, UICollectionViewDataSource, UICollection
         
         let velocityY = velocity.y
         
-        print("DETAIL PAN END: cur: \(newListOffset), max: \(maxOffset) vel: \(velocityY)")
+        print(
+            "DETAIL END: ini: \(self.initialOffset)\t" +
+            "cur: \(newListOffset)\t" +
+            "max: \(maxOffset)\t" +
+            "vel: \(velocityY)")
         if newListOffset < minOffset {
             
             let outerOffsetY = newListOffset - minOffset
@@ -216,12 +235,18 @@ class ActorDetailsVC: UIViewController, UICollectionViewDataSource, UICollection
             self.scrollList(withVelocity: -velocityY)
         }
         
-        print("detail pan END")
+//        refreshInitialOffset()
+        print(
+            "DETAIL ENF: ini: \(self.initialOffset)\t" +
+                "cur: \(newListOffset)\t" +
+                "max: \(maxOffset)\t" +
+            "vel: \(velocityY)")
         
     }
     
     func refreshInitialOffset() {
         self.initialOffset = self.list.contentOffset.y
+        print("detail OFFSET \(self.initialOffset)")
     }
     
     func scrollList(withVelocity velocity:CGFloat) {
