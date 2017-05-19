@@ -29,8 +29,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
 //        window!.translatesAutoresizingMaskIntoConstraints = false
 //        window!.rootViewController = nvc
-//        window!.rootViewController = MainListVC()
-        window!.rootViewController = getActorVC()
+        window!.rootViewController = MainListVC()
+//        window!.rootViewController = getActorVC()
         window!.makeKeyAndVisible()
         
         setupInjection()

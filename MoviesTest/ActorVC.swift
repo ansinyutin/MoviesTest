@@ -107,19 +107,22 @@ class ActorVC: UIViewController {
         
         setup()
         setupEvents()
+        
+        view.backgroundColor = .clear
+        topOffset = maxDetailTopOffset
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-//        animateVCShow()
+        animateVCShow()
     }
     
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-//        animateVCHide()
+        animateVCHide()
     }
     
     func animateVCShow() {

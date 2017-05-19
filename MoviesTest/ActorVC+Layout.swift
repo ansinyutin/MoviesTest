@@ -157,7 +157,7 @@ extension ActorVC {
                            toItem: view,
                            attribute: .top,
                            multiplier: 1.0,
-                           constant: photoTopOffset)
+                           constant: view.frame.size.height)
         
         view.addConstraint(constPhotoTop)
         
@@ -175,7 +175,7 @@ extension ActorVC {
                                                        toItem: subtitleLabel.superview,
                                                        attribute: .bottom,
                                                        multiplier: 1.0,
-                                                       constant: ActorVCAnimation.mainTextYMid)
+                                                       constant: ActorVCAnimation.mainTextYMax)
         view.addConstraint(constMainBlockBottom)
         
         
@@ -186,7 +186,7 @@ extension ActorVC {
                                                     toItem: moviesSubtitleLabel.superview,
                                                     attribute: .bottom,
                                                     multiplier: 1.0,
-                                                    constant: ActorVCAnimation.bottomBlockYMid)
+                                                    constant: ActorVCAnimation.moviesYMax)
         view.addConstraint(constMoviesBottom)
         
         
@@ -196,7 +196,7 @@ extension ActorVC {
                                                   toItem: fansSubtitleLabel.superview,
                                                   attribute: .bottom,
                                                   multiplier: 1.0,
-                                                  constant: ActorVCAnimation.bottomBlockYMid)
+                                                  constant: ActorVCAnimation.fansYMax)
         view.addConstraint(constFansBottom)
         
         
@@ -206,7 +206,7 @@ extension ActorVC {
                                                   toItem: rateSubtitleLabel.superview,
                                                   attribute: .bottom,
                                                   multiplier: 1.0,
-                                                  constant: ActorVCAnimation.bottomBlockYMid)
+                                                  constant: ActorVCAnimation.ratingYMax)
         view.addConstraint(constRateBottom)
         
         
@@ -216,7 +216,7 @@ extension ActorVC {
                                                     toItem: view,
                                                     attribute: .top,
                                                     multiplier: 1.0,
-                                                    constant: maxDetailTopOffset)
+                                                    constant: view.frame.size.height)
         //                                                    constant: -(view.frame.size.height + ActorVCAnimation.detailYFrom))
         view.addConstraint(constDetailTop)
         
