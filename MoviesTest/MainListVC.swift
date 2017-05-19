@@ -187,8 +187,9 @@ class MainListVC: UIViewController {
                           allMovies: 298,
                           fans: 89,
                           rate: 7.3)
+        vc.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
         //TODO transition
-        self.present(vc, animated: true, completion: nil)
+        self.present(vc, animated: false, completion: nil)
 //        self.navigationController?.pushViewController(vc, animated: true)
         
     }

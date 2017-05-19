@@ -137,6 +137,7 @@ extension ActorVC {
     }
     
     func onTap(recognizer:UITapGestureRecognizer) {
-        self.animateVCShow()
+        
+        self.dismiss(animated: true, completion: nil)
     }
 }

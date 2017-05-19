@@ -10,12 +10,17 @@ import UIKit
 import pop
 
 struct ActorVCAnimation {
-    
-    static let mainBlockYFrom:CGFloat = -128
-    static let mainBlockYTo:CGFloat = -158
-    
-    static let bottomBlockYFrom:CGFloat = -62
-    static let bottomBlockYTo:CGFloat = -102
+
+    static let mainTextYMax:CGFloat = -108
+    static let mainTextYMid:CGFloat = -128
+    static let mainBlockYMin:CGFloat = -158
+
+    static let bottomBlockYMid:CGFloat = -62
+    static let bottomBlockYMin:CGFloat = -102
+
+    static let moviesYMax:CGFloat = -32
+    static let fansYMax:CGFloat = -2
+    static let ratingYMax:CGFloat = 22
     
     static let detailTop:CGFloat = 30
     
@@ -23,6 +28,7 @@ struct ActorVCAnimation {
     
     static let vcShowCATiming = CAMediaTimingFunction(controlPoints: 0, 0, 0.38, 1)
     static let vcShowDuration:Double = 0.5
+    static let vcHideDuration:Double = 0.2
 }
 
 enum VerticalScrollDirection {
@@ -101,44 +107,130 @@ class ActorVC: UIViewController {
         
         setup()
         setupEvents()
-        
-        topOffset = maxDetailTopOffset
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
+        super.viewWillAppear(animated)
         
-        self.constDetailTop.constant = self.view.frame.size.height
+//        animateVCShow()
+    }
+    
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         
+//        animateVCHide()
     }
     
     func animateVCShow() {
         
-        let curTime = CACurrentMediaTime()
+        let photoY = getShowVCConstAnimation(from: self.view.frame.size.height, to: ActorVCAnimation.photoTop)
+        let detailY = getShowVCConstAnimation(from: self.view.frame.size.height, to: maxDetailTopOffset)
         
-        let photoYAnimation = POPBasicAnimation(propertyNamed: kPOPLayoutConstraintConstant)!
-        photoYAnimation.duration = ActorVCAnimation.vcShowDuration
-        photoYAnimation.fromValue = self.view.frame.size.height
-        photoYAnimation.toValue = ActorVCAnimation.photoTop
-        photoYAnimation.timingFunction = ActorVCAnimation.vcShowCATiming
+        let mainTextY = getShowVCConstAnimation(from: ActorVCAnimation.mainTextYMax, to: ActorVCAnimation.mainTextYMid)
         
+        let moviesY = getShowVCConstAnimation(from: ActorVCAnimation.moviesYMax, to: ActorVCAnimation.bottomBlockYMid)
+        let fansY = getShowVCConstAnimation(from: ActorVCAnimation.fansYMax, to: ActorVCAnimation.bottomBlockYMid)
+        let ratingY = getShowVCConstAnimation(from: ActorVCAnimation.ratingYMax, to: ActorVCAnimation.bottomBlockYMid)
         
-        let detailYAnimation = POPBasicAnimation(propertyNamed: kPOPLayoutConstraintConstant)!
-        detailYAnimation.duration = ActorVCAnimation.vcShowDuration
-        detailYAnimation.fromValue = self.view.frame.size.height
-        detailYAnimation.toValue = maxDetailTopOffset
-        detailYAnimation.timingFunction = ActorVCAnimation.vcShowCATiming
+        let textAlpha = getShowVCAlphaAnimation(from: 0, to: 1)
         
+        let bgColor = getVCAnimation(from: UIColor.clear, to: UIColor.black, property: kPOPViewBackgroundColor, duration: ActorVCAnimation.vcShowDuration)
         
-        let mainTextYAnimation = POPBasicAnimation(propertyNamed: kPOPLayoutConstraintConstant)!
-        mainTextYAnimation.duration = ActorVCAnimation.vcShowDuration
-        mainTextYAnimation.fromValue = self.view.frame.size.height
-        mainTextYAnimation.toValue = maxDetailTopOffset
-        mainTextYAnimation.timingFunction = ActorVCAnimation.vcShowCATiming
+        self.view.pop_add(bgColor, forKey: "actor.vcshow.photo.bgcolor")
         
         
-        self.constPhotoTop.pop_add(photoYAnimation, forKey: "actor.vcshow.photo.y")
-        self.constDetailTop.pop_add(detailYAnimation, forKey: "actor.vcshow.detail.y")
+        self.constPhotoTop.pop_add(photoY, forKey: "actor.vcshow.photo.y")
+        self.constDetailTop.pop_add(detailY, forKey: "actor.vcshow.detail.y")
+        
+        self.constMainBlockBottom.pop_add(mainTextY, forKey: "actor.vcshow.maintext.y")
+        
+        self.constMoviesBottom.pop_add(moviesY, forKey: "actor.vcshow.movies.y")
+        self.constFansBottom.pop_add(fansY, forKey: "actor.vcshow.fans.y")
+        self.constRateBottom.pop_add(ratingY, forKey: "actor.vcshow.rating.y")
+        
+        
+        self.titleLabel.pop_add(textAlpha, forKey: "actor.vcshow.maintext_title.alpha")
+        self.subtitleLabel.pop_add(textAlpha, forKey: "actor.vcshow.maintext_subtitle.alpha")
+        
+        self.moviesTitleLabel.pop_add(textAlpha, forKey: "actor.vcshow.movies_title.alpha")
+        self.moviesSubtitleLabel.pop_add(textAlpha, forKey: "actor.vcshow.movies_subtitle.alpha")
+        self.fansTitleLabel.pop_add(textAlpha, forKey: "actor.vcshow.fans_title.alpha")
+        self.fansSubtitleLabel.pop_add(textAlpha, forKey: "actor.vcshow.fans_subtitle.alpha")
+        self.rateTitleLabel.pop_add(textAlpha, forKey: "actor.vcshow.rating_title.alpha")
+        self.rateSubtitleLabel.pop_add(textAlpha, forKey: "actor.vcshow.rating_subtitle.alpha")
+    }
+    
+    func animateVCHide() {
+        
+        let photoY = getHideVCConstAnimation(from: ActorVCAnimation.photoTop, to: self.view.frame.size.height)
+        let detailY = getHideVCConstAnimation(from: maxDetailTopOffset, to: self.view.frame.size.height)
+        
+        let mainTextY = getHideVCConstAnimation(from: ActorVCAnimation.mainTextYMid, to: ActorVCAnimation.mainTextYMax)
+        
+        let moviesY = getHideVCConstAnimation(from: ActorVCAnimation.bottomBlockYMid, to: ActorVCAnimation.moviesYMax)
+        let fansY = getHideVCConstAnimation(from: ActorVCAnimation.bottomBlockYMid, to: ActorVCAnimation.fansYMax)
+        let ratingY = getHideVCConstAnimation(from: ActorVCAnimation.bottomBlockYMid, to: ActorVCAnimation.ratingYMax)
+        
+        let textAlpha = getVCAnimation(from: 1, to: 0, property: kPOPViewAlpha, duration: 0.1)
+        
+        let bgColor = getVCAnimation(from: UIColor.black, to: UIColor.clear, property: kPOPViewBackgroundColor, duration: 0.1)
+        
+        self.view.pop_add(bgColor, forKey: "actor.vcshow.photo.bgcolor")
+        
+        self.constPhotoTop.pop_add(photoY, forKey: "actor.vcshow.photo.y")
+        self.constDetailTop.pop_add(detailY, forKey: "actor.vcshow.detail.y")
+        
+        self.constMainBlockBottom.pop_add(mainTextY, forKey: "actor.vcshow.maintext.y")
+        
+        self.constMoviesBottom.pop_add(moviesY, forKey: "actor.vcshow.movies.y")
+        self.constFansBottom.pop_add(fansY, forKey: "actor.vcshow.fans.y")
+        self.constRateBottom.pop_add(ratingY, forKey: "actor.vcshow.rating.y")
+        
+        
+        self.titleLabel.pop_add(textAlpha, forKey: "actor.vcshow.maintext_title.alpha")
+        self.subtitleLabel.pop_add(textAlpha, forKey: "actor.vcshow.maintext_subtitle.alpha")
+        
+        self.moviesTitleLabel.pop_add(textAlpha, forKey: "actor.vcshow.movies_title.alpha")
+        self.moviesSubtitleLabel.pop_add(textAlpha, forKey: "actor.vcshow.movies_subtitle.alpha")
+        self.fansTitleLabel.pop_add(textAlpha, forKey: "actor.vcshow.fans_title.alpha")
+        self.fansSubtitleLabel.pop_add(textAlpha, forKey: "actor.vcshow.fans_subtitle.alpha")
+        self.rateTitleLabel.pop_add(textAlpha, forKey: "actor.vcshow.rating_title.alpha")
+        self.rateStarImageView.pop_add(textAlpha, forKey: "actor.vcshow.rating_star.alpha")
+        self.rateSubtitleLabel.pop_add(textAlpha, forKey: "actor.vcshow.rating_subtitle.alpha")
+    }
+    
+    
+    func getShowVCAlphaAnimation(from:CGFloat, to: CGFloat) -> POPBasicAnimation {
+        return getShowVCAnimation(from: from, to: to, property: kPOPViewAlpha)
+    }
+    func getShowVCConstAnimation(from:CGFloat, to: CGFloat) -> POPBasicAnimation {
+        return getShowVCAnimation(from: from, to: to, property: kPOPLayoutConstraintConstant)
+    }
+    
+    func getShowVCAnimation(from:CGFloat, to: CGFloat, property:String) -> POPBasicAnimation {
+        return getVCAnimation(from: from, to: to, property: property, duration: ActorVCAnimation.vcShowDuration)
+    }
+    
+    func getHideVCAlphaAnimation(from:CGFloat, to: CGFloat) -> POPBasicAnimation {
+        return getShowVCAnimation(from: from, to: to, property: kPOPViewAlpha)
+    }
+    func getHideVCConstAnimation(from:CGFloat, to: CGFloat) -> POPBasicAnimation {
+        return getShowVCAnimation(from: from, to: to, property: kPOPLayoutConstraintConstant)
+    }
+    func getHideVCAnimation(from:CGFloat, to: CGFloat, property:String) -> POPBasicAnimation {
+        return getVCAnimation(from: from, to: to, property: property, duration: ActorVCAnimation.vcHideDuration)
+    }
+    
+    func getVCAnimation(from:Any, to: Any, property:String, duration:Double) -> POPBasicAnimation {
+        
+        let animation = POPBasicAnimation(propertyNamed: property)!
+        animation.duration = duration
+        animation.fromValue = from
+        animation.toValue = to
+        animation.timingFunction = ActorVCAnimation.vcShowCATiming
+        
+        return animation
     }
     
     

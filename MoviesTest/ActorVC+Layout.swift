@@ -175,7 +175,7 @@ extension ActorVC {
                                                        toItem: subtitleLabel.superview,
                                                        attribute: .bottom,
                                                        multiplier: 1.0,
-                                                       constant: ActorVCAnimation.mainBlockYFrom)
+                                                       constant: ActorVCAnimation.mainTextYMid)
         view.addConstraint(constMainBlockBottom)
         
         
@@ -186,7 +186,7 @@ extension ActorVC {
                                                     toItem: moviesSubtitleLabel.superview,
                                                     attribute: .bottom,
                                                     multiplier: 1.0,
-                                                    constant: ActorVCAnimation.bottomBlockYFrom)
+                                                    constant: ActorVCAnimation.bottomBlockYMid)
         view.addConstraint(constMoviesBottom)
         
         
@@ -196,7 +196,7 @@ extension ActorVC {
                                                   toItem: fansSubtitleLabel.superview,
                                                   attribute: .bottom,
                                                   multiplier: 1.0,
-                                                  constant: ActorVCAnimation.bottomBlockYFrom)
+                                                  constant: ActorVCAnimation.bottomBlockYMid)
         view.addConstraint(constFansBottom)
         
         
@@ -206,7 +206,7 @@ extension ActorVC {
                                                   toItem: rateSubtitleLabel.superview,
                                                   attribute: .bottom,
                                                   multiplier: 1.0,
-                                                  constant: ActorVCAnimation.bottomBlockYFrom)
+                                                  constant: ActorVCAnimation.bottomBlockYMid)
         view.addConstraint(constRateBottom)
         
         
