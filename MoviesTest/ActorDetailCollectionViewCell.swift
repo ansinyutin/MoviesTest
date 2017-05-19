@@ -21,16 +21,21 @@ class ActorDetailCollectionViewCell: UICollectionViewCell {
         setup()
     }
     
-    func setupWith(image: UIImage) {
-        self.imageView.image = image
+    func setupWith(image: UIImage, imageSize:CGSize) {
+        self.imageView.image =
+            UIImage.roundedRectImageFromImage(image: image,
+                                              imageSize: imageSize,
+                                              cornerRadius: 5)
     }
+    
+    
     
     func setup() {
         
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.layer.cornerRadius = 5
+//        imageView.layer.cornerRadius = 5
         imageView.contentMode = .center
-        imageView.layer.masksToBounds = true
+//        imageView.layer.masksToBounds = true
         imageView.layer.drawsAsynchronously = true
         imageView.layer.shouldRasterize = true
         

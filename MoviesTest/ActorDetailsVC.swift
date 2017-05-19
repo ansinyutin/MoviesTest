@@ -23,6 +23,9 @@ class ActorDetailsVC: UIViewController, UICollectionViewDataSource, UICollection
     let header = ActorDetailsHeaderView(frame: .zero)
     
     var list:UICollectionView!
+    var listHeader:UICollectionReusableView? = nil
+    
+    let listItemSize = CGSize(width: 100, height: 150)
     
     let data:[Dictionary<String,String>] = DataStorage.shared.actorMovies
     
@@ -33,6 +36,8 @@ class ActorDetailsVC: UIViewController, UICollectionViewDataSource, UICollection
     
     var panRecognizer:UIPanGestureRecognizer!
     
+    var constHeaderHeight = NSLayoutConstraint()
+    
     var initialOffset:CGFloat = 0
     var lastOffset: CGPoint = CGPoint(x: 0, y: 0)
     
@@ -41,14 +46,32 @@ class ActorDetailsVC: UIViewController, UICollectionViewDataSource, UICollection
         return self.list.contentSize.height - self.list.frame.size.height
     }()
     
-    struct Metrics {
-        static var headerHeightMin:CGFloat = 60.0
-        static var headerHeightMax:CGFloat = 80.0
+    var prevTopOffset:CGFloat = 0
+    var topOffset:CGFloat = 0
+    
+    var openProgress:CGFloat = 0 // 0.0 - 1.0
+
+    var isOpened:Bool {
+        return self.openProgress == 1.0
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    let headerShrinkHeight:CGFloat = 20
+    
+    struct Metrics {
+        static var headerHeight:CGFloat = 80.0
+        
+        static var closedBgColor = UIColor(rgba: "#202020")
+        static var openedBgColor = UIColor.moviesBlack5
     }
+    
+    var isTopReached:Bool {
+        return self.list.contentOffset.y <= self.minOffset
+    }
+    
+    var isBottomReached:Bool {
+        return self.list.contentOffset.y >= self.maxOffset
+    }
+
     
     override func loadView() {
         super.loadView()
@@ -69,6 +92,8 @@ class ActorDetailsVC: UIViewController, UICollectionViewDataSource, UICollection
         refresh()
         
         addCustomConstraints()
+        
+        view.backgroundColor = .red
     }
     
     func setupList() {
@@ -81,7 +106,7 @@ class ActorDetailsVC: UIViewController, UICollectionViewDataSource, UICollection
         
         list = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         list.translatesAutoresizingMaskIntoConstraints = false
-        list.backgroundColor = .clear
+        list.backgroundColor = .white
         
         list.delegate = self
         list.dataSource = self
@@ -97,6 +122,7 @@ class ActorDetailsVC: UIViewController, UICollectionViewDataSource, UICollection
     }
     
     func setupHeader() {
+        header.backgroundColor = getBgColor()
         header.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(header)
     }
@@ -104,7 +130,7 @@ class ActorDetailsVC: UIViewController, UICollectionViewDataSource, UICollection
     func addCustomConstraints() {
         
         let metrics:[String:Any] = [
-            "headerHeight": Metrics.headerHeightMax
+            "headerHeight": Metrics.headerHeight
         ]
         
         let views: [String:UIView] = [
@@ -127,10 +153,21 @@ class ActorDetailsVC: UIViewController, UICollectionViewDataSource, UICollection
         
         //Vertical layout
         
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[header(headerHeight)]-0-[list]-0-|",
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[header]-0-[list]-0-|",
                                                            options: [],
                                                            metrics: metrics,
                                                            views: views))
+        
+        
+        self.constHeaderHeight = NSLayoutConstraint(item: header,
+                                                    attribute: .height,
+                                                    relatedBy: .equal,
+                                                    toItem: nil,
+                                                    attribute: .notAnAttribute,
+                                                    multiplier: 1.0,
+                                                    constant: Metrics.headerHeight)
+        
+        view.addConstraint(self.constHeaderHeight)
     }
     
     
@@ -138,190 +175,219 @@ class ActorDetailsVC: UIViewController, UICollectionViewDataSource, UICollection
     
     func refresh(){
         self.header.setupWith(actor: actor)
+        updateAnimatableViews()
     }
     
     
     //MARK:- Scroll handling
     
-    
-//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        super.touchesBegan(touches, with: event)
-//        
-//        stopAnimations()
-//        onPanChange(offset: CGPoint(x:0, y:0))
-//    }
-    
-    
-    func stopAnimations() {
-        list.pop_removeAllAnimations()
-        refreshInitialOffset()
+    func update(withTopOffset offset: CGFloat, openProgress progress: CGFloat) {
+        
+        prevTopOffset = topOffset
+        topOffset = offset
+        openProgress = progress
+        
+        updateAnimatableViews()
     }
     
-    func canHandlePan(offset:CGPoint) -> Bool {
+    func updateAnimatableViews() {
         
-        if isTopReached() && offset.y < 0 {
-            return false
+        if prevTopOffset >= 0 || topOffset >= 0 {
+            shrinkHeader()
+            updateListOffset()
         }
         
-        return true
-    }
-        
-    func isTopReached() -> Bool {
-        return self.list.contentOffset.y <= self.minOffset
-    }
-    
-    func isBottomReached() -> Bool {
-        return self.list.contentOffset.y >= self.maxOffset
-    }
-    
-    func onPanBegin(offset: CGPoint) {
-        refreshInitialOffset()
-        self.list.pop_removeAllAnimations()
-        
-        print(
-            "DETAIL STR ini: \(self.initialOffset)\t" +
-                "off: \(offset.y)")
-    }
-    
-    func onPanChange(offset:CGPoint, isSkipTopCheck: Bool = false) {
-        
-        let newListOffset = self.initialOffset - offset.y
-        let isTopEdgeReached = newListOffset < minOffset
-        
-        print(
-            "DETAIL PAN ini: \(self.initialOffset)\t" +
-            "off: \(offset.y)\t" +
-            "new: \(newListOffset)\t" +
-            "topReached: \(isTopEdgeReached)")
-        
-        if isTopEdgeReached {
-            
-            let outerOffsetY = newListOffset - minOffset
-            let outerOffset = CGPoint(x:0, y:outerOffsetY)
-            
-            panDelegate?.onActorDetailPanChange(offset: outerOffset, updateInitialDetailOffset: true)
-            
-            //TODO start head deformation
-            
-            self.list.contentOffset = CGPoint(x:0, y: minOffset)
-            
-        } else {
-            
-            self.list.contentOffset = CGPoint(x:0, y: newListOffset)
+        if topOffset == 0 {
+            updateOpenProgress()
         }
         
     }
     
-    func onPanEnd(offset:CGPoint, velocity:CGPoint) {
-        
-        let newListOffset = self.initialOffset - offset.y;
-        
-        let velocityY = velocity.y
-        
-        print(
-            "DETAIL END: ini: \(self.initialOffset)\t" +
-            "cur: \(newListOffset)\t" +
-            "max: \(maxOffset)\t" +
-            "vel: \(velocityY)")
-        if newListOffset < minOffset {
-            
-            let outerOffsetY = newListOffset - minOffset
-            let outerOffset = CGPoint(x:0, y:outerOffsetY)
-            
-            refreshInitialOffset()
-            panDelegate?.onActorDetailPanEnd(offset: outerOffset, velocity: velocity)
-            //TODO start head deformation
-        } else {
-            self.scrollList(withVelocity: -velocityY)
-        }
-        
-//        refreshInitialOffset()
-        print(
-            "DETAIL ENF: ini: \(self.initialOffset)\t" +
-                "cur: \(newListOffset)\t" +
-                "max: \(maxOffset)\t" +
-            "vel: \(velocityY)")
-        
+    func shrinkHeader() {
+        shrinkHeaderHeight()
+        shrinkHeaderArrow()
+        shrinkHeaderTitle()
+        shrinkHeaderBBorder()
     }
     
-    func refreshInitialOffset() {
-        self.initialOffset = self.list.contentOffset.y
-        print("detail OFFSET \(self.initialOffset)")
+    let headerHeightShrinkFrames:[KeyFrame] = [
+        KeyFrame(time: 0, value: 80),
+        KeyFrame(time: 20, value: 60),
+    ]
+    
+    func shrinkHeaderHeight() {
+        let headerHeight = Animation.getValue(frames: headerHeightShrinkFrames, time: fabs(topOffset))
+        self.constHeaderHeight.constant = headerHeight
     }
     
-    func scrollList(withVelocity velocity:CGFloat) {
+    func shrinkHeaderArrow() {
+        shrinkHeaderArrowOpacity()
+        shrinkHeaderArrowPosition()
+    }
+    
+    let headerArrowOpacityShrinkFrames:[KeyFrame] = [
+        KeyFrame(time: 0, value: 1),
+        KeyFrame(time: 20, value: 0),
+    ]
+    
+    func shrinkHeaderArrowOpacity() {
+        let opacity = Animation.getValue(frames: headerArrowOpacityShrinkFrames, time: fabs(topOffset))
         
-        print("Detail Scroll Animate START - velocity: \(velocity)")
-        
-        let minOffset:CGFloat = 0
-        let maxOffset:CGFloat = list.contentSize.height - list.frame.size.height
-        
-        let listScrollAnimation = POPDecayAnimation(propertyNamed: kPOPCollectionViewContentOffset)!
-        listScrollAnimation.velocity = CGPoint(x:0, y:velocity)
-        listScrollAnimation.animationDidApplyBlock = { [weak self] (animation:POPAnimation?) in
-            
-            guard let strongSelf = self else {
-                return
-            }
-            
-            let currentOffsetPoint = animation!.value(forKey: "currentValue") as! CGPoint
-            let currentOffset = currentOffsetPoint.y
-            let scrollAnimationVelocity = animation!.value(forKey: "velocity") as! CGPoint
-            
-            if ( currentOffset >= maxOffset ) {
-                
-//                print("DETAIL MAX REACHED: \(currentOffset)")
-                
-//                strongSelf.list.contentOffset = CGPoint(x: 0, y: maxOffset)
-                strongSelf.list.pop_removeAllAnimations()
-                
-                print("Detail Scroll Animate END MAX exceeded")
-                
-                strongSelf.addEdgeBounceAnimationToList(toValue: maxOffset, velocity: scrollAnimationVelocity)
-            }
-            
-            if ( currentOffset < minOffset ) {
-                
-//                print("DETAIL MIN REACHED: \(currentOffset)")
-                
-                strongSelf.list.contentOffset = CGPoint(x: 0, y: minOffset)
-                strongSelf.list.pop_removeAllAnimations()
-                
-                print("Detail Scroll Animate END MIN exceeded")
-                
-                strongSelf.panDelegate?.onActorDetailPanAnimationEnd(velocity: scrollAnimationVelocity)
-            }
-            
-//            print("DETAIL CURRENT OFFSET: \(currentOffset)")
-            
-            strongSelf.refreshInitialOffset()
-            
-        }
-        
-//        print("DETAIL ANIM START")
+        print("shrink opacity: \(opacity)")
+        self.header.arrowImageView.layer.opacity = Float(opacity)
+    }
+    
+    let headerArrowPositionShrinkFrames:[KeyFrame] = [
+        KeyFrame(time: 0, value: 15),
+        KeyFrame(time: 20, value: 5),
+    ]
 
-        list.pop_add(listScrollAnimation, forKey: "detailListScrollAnimation")
+    func shrinkHeaderArrowPosition() {
+        let offset = Animation.getValue(frames: headerArrowPositionShrinkFrames, time: fabs(topOffset))
+        self.header.constArrowTop.constant = offset
     }
     
+    let headerTitlePositionShrinkFrames:[KeyFrame] = [
+        KeyFrame(time: 0, value: 34),
+        KeyFrame(time: 20, value: 18),
+    ]
     
-    func addEdgeBounceAnimationToList(toValue: CGFloat, velocity: CGPoint) {
+    func shrinkHeaderTitle() {
+        let offset = Animation.getValue(frames: headerTitlePositionShrinkFrames, time: fabs(topOffset))
+        self.header.constNameTop.constant = offset
+    }
+    
+    func shrinkHeaderBBorder() {
         
-        print("Detail Edge Bounce Animation START")
+        self.header.showBBorder = topOffset > headerShrinkHeight
+    }
+    
+    func updateListOffset() {
+
+        let listOffset = getOffsetForList()
+        self.list.contentOffset = CGPoint(x: 0, y: listOffset)
+    }
+    
+    func getOffsetForList() -> CGFloat {
         
-        let listScrollAnimation = POPSpringAnimation(propertyNamed: kPOPCollectionViewContentOffset)!
-        listScrollAnimation.velocity = velocity
-        listScrollAnimation.toValue = CGPoint(x:0, y: toValue)
-        listScrollAnimation.animationDidApplyBlock = { [weak self] (springAnimation:POPAnimation?) in
-            let currentOffsetPointForSpringAnimation = springAnimation!.value(forKey: "currentValue") as! CGPoint
-            self?.initialOffset = currentOffsetPointForSpringAnimation.y
-            
+        var offset = topOffset
+        
+        if offset > headerShrinkHeight {
+            offset -= headerShrinkHeight
+        } else {
+            offset = 0
         }
         
-        listScrollAnimation.completionBlock = { (anim:POPAnimation?, completion:Bool) in
-            print("Detail Edge Bounce Animation END")
+        return offset
+    }
+    
+    func updateOpenProgress() {
+        
+        updateBackgroundColor()
+        updateHeader()
+    }
+    
+    func updateBackgroundColor() {
+        let color = getBgColor()
+        
+        header.backgroundColor = color
+        listHeader?.backgroundColor = color
+    }
+    
+    func updateHeader() {
+        
+        updateHeaderArrowOpacity()
+        updateHeaderArrowRotation()
+        
+        updateHeaderDotsOpacity()
+        
+        updateHeaderTitlePosition()
+        updateHeaderTitleOpacity()
+    }
+    
+    var headerTitlePositionFrames:[KeyFrame] = [
+        KeyFrame(time: 0, value: 44),
+        KeyFrame(time: 0.6, value: 44),
+        KeyFrame(time: 0.9, value: 34),
+        KeyFrame(time: 1, value: 34),
+    ]
+    
+    func updateHeaderTitlePosition() {
+        let offset = Animation.getValue(frames: headerTitlePositionFrames, time: openProgress)
+        self.header.constNameTop.constant = offset
+    }
+    
+    var headerTitleOpacityFrames:[KeyFrame] = [
+        KeyFrame(time: 0, value: 0),
+        KeyFrame(time: 0.6, value: 0),
+        KeyFrame(time: 0.85, value: 1),
+        KeyFrame(time: 1, value: 1),
+    ]
+    
+    func updateHeaderTitleOpacity() {
+        
+        let titleOpacity = Animation.getValue(frames: headerTitleOpacityFrames, time: openProgress)
+        self.header.nameLabel.layer.opacity = Float(titleOpacity)
+        self.header.profLabel.layer.opacity = Float(titleOpacity)
+    }
+    
+    func updateHeaderArrowRotation() {
+        
+        var degrees:CGFloat = 0
+        
+        if openProgress <= 0.4 {
+            degrees = 180
+        } else {
+            degrees = 0
         }
         
-        self.list.pop_add(listScrollAnimation, forKey: "detailListScrollEndAnimation")
+        let angle = CGAffineTransform(rotationAngle: degrees * CGFloat.pi/180.0)
+        
+        self.header.arrowImageView.transform = angle
+    }
+    
+    var arrowOpacityFrames:[KeyFrame] = [
+        KeyFrame(time: 0, value: 0.2),
+        KeyFrame(time: 0.4, value: 0),
+        KeyFrame(time: 0.6, value: 0),
+        KeyFrame(time: 1, value: 1),
+    ]
+    
+    func updateHeaderArrowOpacity() {
+        
+        let arrowOpacity = Animation.getValue(frames: arrowOpacityFrames, time: openProgress)
+        print("arrow opacity: \(arrowOpacity)")
+        self.header.arrowImageView.layer.opacity = Float(arrowOpacity)
+    }
+    
+    var headerDotsOpacityFrames:[KeyFrame] = [
+        KeyFrame(time: 0, value: 0),
+        KeyFrame(time: 0.9, value: 0),
+        KeyFrame(time: 1, value: 1),
+    ]
+    
+    func updateHeaderDotsOpacity() {
+        
+        let dotsOpacity = Animation.getValue(frames: headerDotsOpacityFrames, time: openProgress)
+        
+        self.header.dotsImageView.layer.opacity = Float(dotsOpacity)
+    }
+    
+    func updateHeaderTitle() {
+        
+    }
+    
+    var bgOpacityFrames:[KeyFrame] = [
+        KeyFrame(time: 0, value: 0.13),
+        KeyFrame(time: 0.3, value: 0.13),
+        KeyFrame(time: 0.9, value: 0.95),
+        KeyFrame(time: 1, value: 0.95),
+    ]
+    
+    func getBgColor() -> UIColor {
+        
+        let curAlpha = Animation.getValue(frames: bgOpacityFrames, time: openProgress)
+        return UIColor.init(white: curAlpha, alpha: 1)
     }
     
     //MARK:- CollectionView Delegate
@@ -345,9 +411,14 @@ class ActorDetailsVC: UIViewController, UICollectionViewDataSource, UICollection
         let imageName = dataItem["image"]!
         let image = UIImage(named:imageName)!
         
-        cell.setupWith(image: image)
+        cell.setupWith(image: image, imageSize: listItemSize)
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        return listItemSize
     }
    
     
@@ -355,17 +426,23 @@ class ActorDetailsVC: UIViewController, UICollectionViewDataSource, UICollection
         
         var reusableView : UICollectionReusableView? = nil
         
-        // Create header
+
         if (kind == UICollectionElementKindSectionHeader) {
-            // Create Header
-            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: self.reuseIdForMoviesHeader, for: indexPath) as! ActorDetailsCollectionViewHeader
+
+            let headerView =
+                collectionView.dequeueReusableSupplementaryView(
+                    ofKind: kind,
+                    withReuseIdentifier: self.reuseIdForMoviesHeader,
+                    for: indexPath) as! ActorDetailsCollectionViewHeader
             
-            headerView.backgroundColor = UIColor.moviesBlack5
- 
+            headerView.backgroundColor = getBgColor()
             headerView.setupWith(actor: self.actor)
             
             reusableView = headerView
+            
+            listHeader = headerView
         }
+        
         return reusableView!
     }
     

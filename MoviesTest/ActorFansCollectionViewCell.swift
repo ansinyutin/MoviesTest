@@ -21,8 +21,11 @@ class ActorFansCollectionViewCell: UICollectionViewCell {
         setup()
     }
     
-    func setupWith(image: UIImage) {
-        self.imageView.image = image
+    func setupWith(image: UIImage, imageSize:CGSize) {
+        self.imageView.image =
+            UIImage.roundedRectImageFromImage(image: image,
+                                              imageSize: imageSize,
+                                              cornerRadius: self.bounds.size.width / 2)
     }
     
     func setup() {

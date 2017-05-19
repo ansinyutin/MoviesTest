@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3DE8B3BBA4A40654A254FA7D /* Pods_MoviesTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E84C7ACD33F048470DB878 /* Pods_MoviesTest.framework */; };
+		4900F6501ECE1E0D0035B417 /* Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4900F64F1ECE1E0D0035B417 /* Animation.swift */; };
 		4906310A1E8BA04F003E30CA /* UIView+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490631091E8BA04F003E30CA /* UIView+Custom.swift */; };
 		4906310D1E8BABC2003E30CA /* ActorVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4906310C1E8BABC2003E30CA /* ActorVC.swift */; };
 		490631111E8BB049003E30CA /* UILabel+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490631101E8BB049003E30CA /* UILabel+Custom.swift */; };
@@ -30,6 +31,7 @@
 		49596A3E1E85A5F4004C5F27 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 49596A3C1E85A5F4004C5F27 /* LaunchScreen.storyboard */; };
 		49596A461E85AA2F004C5F27 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 49596A451E85AA2F004C5F27 /* main.m */; };
 		496618091ECA2E980013D8F5 /* ImmediateGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 496618081ECA2E980013D8F5 /* ImmediateGestureRecognizer.swift */; };
+		4966180B1ECAE6970013D8F5 /* UIImage+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4966180A1ECAE6970013D8F5 /* UIImage+Custom.swift */; };
 		498A4E501E8A4B1E00158571 /* DataStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 498A4E4F1E8A4B1E00158571 /* DataStorage.swift */; };
 		498A4E541E8A516A00158571 /* NavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 498A4E531E8A516A00158571 /* NavBar.swift */; };
 		498A4E561E8A517200158571 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 498A4E551E8A517200158571 /* SearchBar.swift */; };
@@ -55,6 +57,7 @@
 
 /* Begin PBXFileReference section */
 		09E84C7ACD33F048470DB878 /* Pods_MoviesTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MoviesTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4900F64F1ECE1E0D0035B417 /* Animation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animation.swift; sourceTree = "<group>"; };
 		490631091E8BA04F003E30CA /* UIView+Custom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Custom.swift"; sourceTree = "<group>"; };
 		4906310C1E8BABC2003E30CA /* ActorVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActorVC.swift; sourceTree = "<group>"; };
 		490631101E8BB049003E30CA /* UILabel+Custom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UILabel+Custom.swift"; sourceTree = "<group>"; };
@@ -79,6 +82,7 @@
 		49596A3F1E85A5F4004C5F27 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		49596A451E85AA2F004C5F27 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		496618081ECA2E980013D8F5 /* ImmediateGestureRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImmediateGestureRecognizer.swift; sourceTree = "<group>"; };
+		4966180A1ECAE6970013D8F5 /* UIImage+Custom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Custom.swift"; sourceTree = "<group>"; };
 		498A4E4F1E8A4B1E00158571 /* DataStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStorage.swift; sourceTree = "<group>"; };
 		498A4E531E8A516A00158571 /* NavBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavBar.swift; sourceTree = "<group>"; };
 		498A4E551E8A517200158571 /* SearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
@@ -208,6 +212,8 @@
 				490631101E8BB049003E30CA /* UILabel+Custom.swift */,
 				4906311E1E8C540B003E30CA /* String+Custom.swift */,
 				496618081ECA2E980013D8F5 /* ImmediateGestureRecognizer.swift */,
+				4966180A1ECAE6970013D8F5 /* UIImage+Custom.swift */,
+				4900F64F1ECE1E0D0035B417 /* Animation.swift */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -420,6 +426,7 @@
 				498A4E5B1E8A5C9C00158571 /* UIFont+Custom.swift in Sources */,
 				49DD23FE1E89B46A00482771 /* MovieCell.swift in Sources */,
 				4906312D1E8D2C7F003E30CA /* ActorDetailsHeaderView.swift in Sources */,
+				4966180B1ECAE6970013D8F5 /* UIImage+Custom.swift in Sources */,
 				498A4E601E8A744500158571 /* TextField.swift in Sources */,
 				49596A361E85A5F4004C5F27 /* ViewController.swift in Sources */,
 				493914DF1E8E81E000F1FFCC /* DeleteMe2.swift in Sources */,
@@ -446,6 +453,7 @@
 				490631111E8BB049003E30CA /* UILabel+Custom.swift in Sources */,
 				49DD24021E89BF3600482771 /* ActorsListVC.swift in Sources */,
 				49F102521EC90A4D00B2F29D /* ActorVC+Layout.swift in Sources */,
+				4900F6501ECE1E0D0035B417 /* Animation.swift in Sources */,
 				49596A341E85A5F4004C5F27 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -81,7 +81,7 @@ extension ActorVC {
         
         
         
-        detailVC.panDelegate = self
+//        detailVC.panDelegate = self
         detailVC.view.translatesAutoresizingMaskIntoConstraints = false
         detailVC.view.backgroundColor = .white
         self.addChildViewController(detailVC)
@@ -126,8 +126,16 @@ extension ActorVC {
     //MARK:- Events
     
     func setupEvents() {
-//        self.panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(onPan))
-        self.panRecognizer = ImmediatePanGestureRecognizer(target: self, action: #selector(onPan))
+        
+        self.panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(onPan))
+//        self.panRecognizer = ImmediatePanGestureRecognizer(target: self, action: #selector(onPan))
         self.view.addGestureRecognizer(self.panRecognizer)
+        
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(onTap))
+        self.view.addGestureRecognizer(tapRecognizer)
+    }
+    
+    func onTap(recognizer:UITapGestureRecognizer) {
+        self.dismiss(animated: true, completion: nil)
     }
 }

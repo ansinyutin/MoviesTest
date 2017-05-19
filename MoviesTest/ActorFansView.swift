@@ -30,6 +30,8 @@ class ActorsFansView: UIView, UICollectionViewDataSource, UICollectionViewDelega
         return count > 0 ? count : 0
     }
     
+    let cellSize = CGSize(width: 30, height: 30)
+    
     var cellsCount:Int {
         
         if data.count >= maxCellsCount {
@@ -177,7 +179,7 @@ class ActorsFansView: UIView, UICollectionViewDataSource, UICollectionViewDelega
             
             let defaultCell = collectionView.dequeueReusableCell(withReuseIdentifier: self.defaultCellReuseId, for: indexPath) as! ActorFansCollectionViewCell
 
-            defaultCell.setupWith(image: image)
+            defaultCell.setupWith(image: image, imageSize: cellSize)
             
             cell = defaultCell
         }
@@ -187,12 +189,12 @@ class ActorsFansView: UIView, UICollectionViewDataSource, UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        return CGSize(width: 30, height: 30)
+        return cellSize
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
 
-        let totalCellWidth:CGFloat = CGFloat(30 * self.cellsCount)
+        let totalCellWidth:CGFloat = cellSize.width * CGFloat(self.cellsCount)
         let totalSpacingWidth:CGFloat = CGFloat(5 * (self.cellsCount - 1))
         
         let halfParentWidth = collectionView.frame.width / 2

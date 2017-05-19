@@ -32,7 +32,15 @@ class ActorDetailsHeaderView: UIView {
         static var profBottom:CGFloat = 18
     }
     
-    var showBBorder = true
+    var showBBorder = false {
+        didSet {
+            
+            if showBBorder != oldValue {
+                self.setNeedsDisplay()
+                print("bborder update: \(showBBorder)")
+            }
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -42,7 +50,7 @@ class ActorDetailsHeaderView: UIView {
     
     func setup() {
         
-        self.backgroundColor = UIColor.moviesBlack5
+//        self.backgroundColor = UIColor.green
         
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.textColor = UIColor.moviesBlackTwo

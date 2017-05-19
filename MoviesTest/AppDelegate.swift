@@ -29,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
 //        window!.translatesAutoresizingMaskIntoConstraints = false
 //        window!.rootViewController = nvc
-//        window!.rootViewController = vc
+//        window!.rootViewController = MainListVC()
         window!.rootViewController = getActorVC()
         window!.makeKeyAndVisible()
         

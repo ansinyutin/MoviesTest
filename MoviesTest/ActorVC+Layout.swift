@@ -201,15 +201,15 @@ extension ActorVC {
         self.view.addConstraint(self.constRateBottom)
         
         
-        self.constDetailBottom = NSLayoutConstraint(item: detailVC.view,
+        self.constDetailTop = NSLayoutConstraint(item: detailVC.view,
                                                     attribute: .top,
                                                     relatedBy: .equal,
                                                     toItem: self.view,
-                                                    attribute: .bottom,
+                                                    attribute: .top,
                                                     multiplier: 1.0,
-                                                    constant: ActorVCAnimation.detailYFrom)
+                                                    constant: maxDetailTopOffset)
         //                                                    constant: -(view.frame.size.height + ActorVCAnimation.detailYFrom))
-        self.view.addConstraint(self.constDetailBottom)
+        self.view.addConstraint(self.constDetailTop)
         
         
     }
