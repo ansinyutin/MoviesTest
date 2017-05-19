@@ -34,7 +34,6 @@ class ActorDetailsHeaderView: UIView {
     
     var showBBorder = false {
         didSet {
-            
             if showBBorder != oldValue {
                 self.setNeedsDisplay()
                 print("bborder update: \(showBBorder)")

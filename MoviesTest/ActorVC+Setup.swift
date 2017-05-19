@@ -20,6 +20,7 @@ extension ActorVC {
         photoImageView.layer.drawsAsynchronously = true
         photoImageView.layer.shouldRasterize = true
         photoImageView.layer.masksToBounds = true
+        photoImageView.layer.anchorPoint = CGPoint(x: 0.5, y: 0)
         
         if let win = UIApplication.shared.keyWindow {
             photoImageView.layer.rasterizationScale = win.screen.scale
@@ -136,6 +137,6 @@ extension ActorVC {
     }
     
     func onTap(recognizer:UITapGestureRecognizer) {
-        self.dismiss(animated: true, completion: nil)
+        self.animateVCShow()
     }
 }

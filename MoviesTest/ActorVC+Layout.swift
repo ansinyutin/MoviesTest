@@ -12,13 +12,16 @@ extension ActorVC {
         
     func addCustomConstraints() {
         
+        let photoTopOffset:CGFloat = 43
+        
         let metrics:[String:Any] = [
             "textPadding": 30,
+            "photoTop": photoTopOffset,
             "moviesWidth": 260,
             "fansWidth": 260,
             "rateWidth": 260,
-            "detailHeight": self.view.frame.size.height - 20,
-            ]
+            "detailHeight": view.frame.size.height - 20,
+        ]
         
         let views: [String:UIView] = [
             "title":titleLabel,
@@ -70,14 +73,14 @@ extension ActorVC {
                                                            metrics: metrics,
                                                            views: views))
         
-        self.view.addConstraint(NSLayoutConstraint(item: moviesSubtitleLabel,
+        view.addConstraint(NSLayoutConstraint(item: moviesSubtitleLabel,
                                                    attribute: .leading,
                                                    relatedBy: .equal,
                                                    toItem: moviesTitleLabel,
                                                    attribute: .leading,
                                                    multiplier: 1.0,
                                                    constant: 0))
-        self.view.addConstraint(NSLayoutConstraint(item: moviesSubtitleLabel,
+        view.addConstraint(NSLayoutConstraint(item: moviesSubtitleLabel,
                                                    attribute: .trailing,
                                                    relatedBy: .equal,
                                                    toItem: moviesTitleLabel,
@@ -86,14 +89,14 @@ extension ActorVC {
                                                    constant: 0))
         
         
-        self.view.addConstraint(NSLayoutConstraint(item: fansSubtitleLabel,
+        view.addConstraint(NSLayoutConstraint(item: fansSubtitleLabel,
                                                    attribute: .leading,
                                                    relatedBy: .equal,
                                                    toItem: fansTitleLabel,
                                                    attribute: .leading,
                                                    multiplier: 1.0,
                                                    constant: 0))
-        self.view.addConstraint(NSLayoutConstraint(item: fansSubtitleLabel,
+        view.addConstraint(NSLayoutConstraint(item: fansSubtitleLabel,
                                                    attribute: .trailing,
                                                    relatedBy: .equal,
                                                    toItem: fansTitleLabel,
@@ -107,7 +110,7 @@ extension ActorVC {
                                                            metrics: metrics,
                                                            views: views))
         
-        self.view.addConstraint(NSLayoutConstraint(item: rateSubtitleLabel,
+        view.addConstraint(NSLayoutConstraint(item: rateSubtitleLabel,
                                                    attribute: .leading,
                                                    relatedBy: .equal,
                                                    toItem: rateTitleLabel,
@@ -122,11 +125,6 @@ extension ActorVC {
         
         //TODO delete
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[detail(detailHeight)]",
-                                                           options: [],
-                                                           metrics: metrics,
-                                                           views: views))
-        
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-43-[photo]",
                                                            options: [],
                                                            metrics: metrics,
                                                            views: views))
@@ -152,7 +150,18 @@ extension ActorVC {
                                                            metrics: metrics,
                                                            views: views))
         
-        self.view.addConstraint(NSLayoutConstraint(item: rateStarImageView,
+        
+        constPhotoTop = NSLayoutConstraint(item: photoImageView,
+                           attribute: .centerY,
+                           relatedBy: .equal,
+                           toItem: view,
+                           attribute: .top,
+                           multiplier: 1.0,
+                           constant: photoTopOffset)
+        
+        view.addConstraint(constPhotoTop)
+        
+        view.addConstraint(NSLayoutConstraint(item: rateStarImageView,
                                                    attribute: .centerY,
                                                    relatedBy: .equal,
                                                    toItem: rateTitleLabel,
@@ -160,56 +169,56 @@ extension ActorVC {
                                                    multiplier: 1.0,
                                                    constant: 0))
         
-        self.constMainBlockBottom = NSLayoutConstraint(item: subtitleLabel,
+        constMainBlockBottom = NSLayoutConstraint(item: subtitleLabel,
                                                        attribute: .bottom,
                                                        relatedBy: .equal,
                                                        toItem: subtitleLabel.superview,
                                                        attribute: .bottom,
                                                        multiplier: 1.0,
                                                        constant: ActorVCAnimation.mainBlockYFrom)
-        self.view.addConstraint(self.constMainBlockBottom)
+        view.addConstraint(constMainBlockBottom)
         
         
         
-        self.constMoviesBottom = NSLayoutConstraint(item: moviesSubtitleLabel,
+        constMoviesBottom = NSLayoutConstraint(item: moviesSubtitleLabel,
                                                     attribute: .bottom,
                                                     relatedBy: .equal,
                                                     toItem: moviesSubtitleLabel.superview,
                                                     attribute: .bottom,
                                                     multiplier: 1.0,
                                                     constant: ActorVCAnimation.bottomBlockYFrom)
-        self.view.addConstraint(self.constMoviesBottom)
+        view.addConstraint(constMoviesBottom)
         
         
-        self.constFansBottom = NSLayoutConstraint(item: fansSubtitleLabel,
+        constFansBottom = NSLayoutConstraint(item: fansSubtitleLabel,
                                                   attribute: .bottom,
                                                   relatedBy: .equal,
                                                   toItem: fansSubtitleLabel.superview,
                                                   attribute: .bottom,
                                                   multiplier: 1.0,
                                                   constant: ActorVCAnimation.bottomBlockYFrom)
-        self.view.addConstraint(self.constFansBottom)
+        view.addConstraint(constFansBottom)
         
         
-        self.constRateBottom = NSLayoutConstraint(item: rateSubtitleLabel,
+        constRateBottom = NSLayoutConstraint(item: rateSubtitleLabel,
                                                   attribute: .bottom,
                                                   relatedBy: .equal,
                                                   toItem: rateSubtitleLabel.superview,
                                                   attribute: .bottom,
                                                   multiplier: 1.0,
                                                   constant: ActorVCAnimation.bottomBlockYFrom)
-        self.view.addConstraint(self.constRateBottom)
+        view.addConstraint(constRateBottom)
         
         
-        self.constDetailTop = NSLayoutConstraint(item: detailVC.view,
+        constDetailTop = NSLayoutConstraint(item: detailVC.view,
                                                     attribute: .top,
                                                     relatedBy: .equal,
-                                                    toItem: self.view,
+                                                    toItem: view,
                                                     attribute: .top,
                                                     multiplier: 1.0,
                                                     constant: maxDetailTopOffset)
         //                                                    constant: -(view.frame.size.height + ActorVCAnimation.detailYFrom))
-        self.view.addConstraint(self.constDetailTop)
+        view.addConstraint(constDetailTop)
         
         
     }

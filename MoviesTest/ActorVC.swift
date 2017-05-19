@@ -10,14 +10,19 @@ import UIKit
 import pop
 
 struct ActorVCAnimation {
+    
     static let mainBlockYFrom:CGFloat = -128
-    static let mainBlockYTo:CGFloat = -128
+    static let mainBlockYTo:CGFloat = -158
     
     static let bottomBlockYFrom:CGFloat = -62
-    static let bottomBlockYTo:CGFloat = -62
+    static let bottomBlockYTo:CGFloat = -102
     
-    static let detailYFrom:CGFloat = -30
-    static let detailYTo:CGFloat = -30
+    static let detailTop:CGFloat = 30
+    
+    static let photoTop:CGFloat = 43
+    
+    static let vcShowCATiming = CAMediaTimingFunction(controlPoints: 0, 0, 0.38, 1)
+    static let vcShowDuration:Double = 0.5
 }
 
 enum VerticalScrollDirection {
@@ -44,12 +49,11 @@ class ActorVC: UIViewController {
     var detailVC = ActorDetailsVC()
     
     var constMainBlockBottom = NSLayoutConstraint()
-    
     var constMoviesBottom = NSLayoutConstraint()
     var constFansBottom = NSLayoutConstraint()
     var constRateBottom = NSLayoutConstraint()
-    
     var constDetailTop = NSLayoutConstraint()
+    var constPhotoTop = NSLayoutConstraint()
     
     
     var previousPanPoint = CGPoint.zero
@@ -70,6 +74,14 @@ class ActorVC: UIViewController {
     }()
     
     var topOffset:CGFloat = 0
+    
+    var openProgress:CGFloat {
+        
+        let maxDiff = maxDetailTopOffset - minDetailTopOffset
+        let diff = constDetailTop.constant - minDetailTopOffset
+        
+        return 1 - diff/maxDiff
+    }
 
     var isDetailOpened:Bool {
         return self.constDetailTop.constant == maxDetailTopOffset
@@ -83,9 +95,6 @@ class ActorVC: UIViewController {
     
     var panAnimationEndOffset:CGFloat = 0
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
     
     override func loadView() {
         super.loadView()
@@ -95,6 +104,43 @@ class ActorVC: UIViewController {
         
         topOffset = maxDetailTopOffset
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+        self.constDetailTop.constant = self.view.frame.size.height
+        
+    }
+    
+    func animateVCShow() {
+        
+        let curTime = CACurrentMediaTime()
+        
+        let photoYAnimation = POPBasicAnimation(propertyNamed: kPOPLayoutConstraintConstant)!
+        photoYAnimation.duration = ActorVCAnimation.vcShowDuration
+        photoYAnimation.fromValue = self.view.frame.size.height
+        photoYAnimation.toValue = ActorVCAnimation.photoTop
+        photoYAnimation.timingFunction = ActorVCAnimation.vcShowCATiming
+        
+        
+        let detailYAnimation = POPBasicAnimation(propertyNamed: kPOPLayoutConstraintConstant)!
+        detailYAnimation.duration = ActorVCAnimation.vcShowDuration
+        detailYAnimation.fromValue = self.view.frame.size.height
+        detailYAnimation.toValue = maxDetailTopOffset
+        detailYAnimation.timingFunction = ActorVCAnimation.vcShowCATiming
+        
+        
+        let mainTextYAnimation = POPBasicAnimation(propertyNamed: kPOPLayoutConstraintConstant)!
+        mainTextYAnimation.duration = ActorVCAnimation.vcShowDuration
+        mainTextYAnimation.fromValue = self.view.frame.size.height
+        mainTextYAnimation.toValue = maxDetailTopOffset
+        mainTextYAnimation.timingFunction = ActorVCAnimation.vcShowCATiming
+        
+        
+        self.constPhotoTop.pop_add(photoYAnimation, forKey: "actor.vcshow.photo.y")
+        self.constDetailTop.pop_add(detailYAnimation, forKey: "actor.vcshow.detail.y")
+    }
+    
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
@@ -196,15 +242,80 @@ class ActorVC: UIViewController {
     
     func updateAnimatedItems() {
         
+        
+//        self.detailVC.view.layer.opacity = 0.3
+        
+        updateDetailTopOffset()
+        updateActorFade()
+        updateActorZoom()
+        updateTextPanOffset()
+        updateDetailInternals()
+        
+        printStats()
+    }
+    
+    func updateDetailTopOffset() {
+        
         if topOffset > minDetailTopOffset {
             constDetailTop.constant = topOffset
         } else {
             constDetailTop.constant = getMainOffset()
         }
-        updateDetailInternals()
-        
-        printStats()
     }
+    
+    let actorFadeFrames:[KeyFrame] = [
+        KeyFrame(time: 0, value: 1),
+        KeyFrame(time: 0.45, value: 0.2)
+    ]
+    
+    func updateActorFade() {
+        let opacity = Animation.getValue(frames: actorFadeFrames, time: openProgress)
+        photoImageView.layer.opacity = Float(opacity)
+    }
+    
+    let actorZoomFrames:[KeyFrame] = [
+        KeyFrame(time: -1, value: 1.15),
+        KeyFrame(time: 0, value: 1),
+        KeyFrame(time: 1, value: 0.9)
+    ]
+    
+    func updateActorZoom() {
+        let scale = Animation.getValue(frames: actorZoomFrames, time: openProgress)
+        photoImageView.layer.anchorPoint = CGPoint(x: 0.5, y: 0)
+        photoImageView.transform = CGAffineTransform(scaleX: scale, y: scale)
+    }
+    
+    func updateTextPanOffset() {
+        updateMainTextPanOffset()
+        updateBottomTextPanOffset()
+    }
+    
+    let mainTextPanFrames:[KeyFrame] = [
+        KeyFrame(time: 0, value: -128),
+        KeyFrame(time: 0.7, value: -198)
+    ]
+    
+    func updateMainTextPanOffset() {
+        let offset = Animation.getValue(frames: mainTextPanFrames, time: openProgress)
+        
+        constMainBlockBottom.constant = offset
+    }
+    
+    let bottomTextPanFrames:[KeyFrame] = [
+        KeyFrame(time: 0, value: -62),
+        KeyFrame(time: 0.7, value: -132)
+    ]
+
+    func updateBottomTextPanOffset() {
+        let offset = Animation.getValue(frames: bottomTextPanFrames, time: openProgress)
+        
+        constFansBottom.constant = offset
+        constRateBottom.constant = offset
+        constMoviesBottom.constant = offset
+    }
+    
+    
+    
     
     func updateDetailInternals() {
         
@@ -212,7 +323,6 @@ class ActorVC: UIViewController {
         let detailOpenProgress = getDetailOpenProgress()
         
         self.detailVC.update(withTopOffset: -extraOffset, openProgress: detailOpenProgress)
-        
     }
     
     func getDetailOpenProgress() -> CGFloat {
@@ -246,7 +356,8 @@ class ActorVC: UIViewController {
             "main: \(String(format: "%.1f", getMainOffset()))\t" +
             "extra: \(String(format: "%.1f", extraOffset))\t" +
             "overall: \(String(format: "%.1f", minOverallOffset))\t" +
-            "open: \(String(format: "%.1f", getDetailOpenProgress()))\t" +
+            "open: \(String(format: "%.2f", openProgress))\t" +
+            "Dopen: \(String(format: "%.2f", getDetailOpenProgress()))\t" +
             "top: \(constDetailTop.constant)\t")
 //            "pan prev: \(previousPanPoint.y) \(panPoint.y)")
     }
