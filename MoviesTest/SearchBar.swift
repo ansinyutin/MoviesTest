@@ -32,15 +32,13 @@ class SearchBar: UIView, UITextFieldDelegate {
         setup()
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     func setup() {
         setupSubviews()
         setupEvents()
         addCustomConstraints()
     }
+    
+    //MARK:- Setup
     
     func setupSubviews() {
         
@@ -77,7 +75,7 @@ class SearchBar: UIView, UITextFieldDelegate {
     func setupEvents() {
         self.cancelButton.addTarget(self, action: #selector(onTapCancelButton), for: .touchUpInside)
     }
-    
+        
     func addCustomConstraints() {
         
         let metrics: [String:Any] = [
@@ -144,7 +142,7 @@ class SearchBar: UIView, UITextFieldDelegate {
         
     }
     
-    //MARK: - Events
+    //MARK:- Events
     
     func onTapCancelButton() {
         self.delegate?.searchBarDidTapCancelButton()
@@ -162,6 +160,8 @@ class SearchBar: UIView, UITextFieldDelegate {
         self.delegate?.searchBarDidChageText(text: textField.text ?? "")
     }
     
+    //MARK:- Misc
+    
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         
@@ -172,6 +172,12 @@ class SearchBar: UIView, UITextFieldDelegate {
             rectanglePath.fill()
         }
     }
+    
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     
 }
 

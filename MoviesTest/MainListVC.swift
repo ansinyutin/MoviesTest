@@ -38,25 +38,15 @@ class MainListVC: UIViewController {
     
     func setup() {
         
-//        self.view.backgroundColor = .red
-        
-//        self.view.layer.borderColor = UIColor.blue.cgColor
-//        self.view.layer.borderWidth = 4
-        
         setupSubviews()
-        
         setupEvents()
         
         addCustomConstraints()
         
         showMovies()
-        
     }
     
     func setupSubviews() {
-        
-//        self.view.translatesAutoresizingMaskIntoConstraints = false
-        
         
         searchBar = SearchBar(frame: .zero)
         searchBar.translatesAutoresizingMaskIntoConstraints = false
@@ -82,7 +72,6 @@ class MainListVC: UIViewController {
         self.view.addSubview(actorsVC.view)
         actorsVC.didMove(toParentViewController: self)
     }
-    
     
     func setupEvents() {
         moviesButton.addTarget(self, action: #selector(onTapMoviesButton), for: .touchUpInside)
@@ -178,7 +167,6 @@ class MainListVC: UIViewController {
         moviesButton.isSelected = false
     }
     
-    
     func showActorDetail() {
         let vc = ActorVC()
         vc.setupWithActor(name: "Willem Dafoe",
@@ -187,11 +175,9 @@ class MainListVC: UIViewController {
                           allMovies: 298,
                           fans: 89,
                           rate: 7.3)
-        vc.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
-        //TODO transition
-        self.present(vc, animated: false, completion: nil)
-//        self.navigationController?.pushViewController(vc, animated: true)
         
+        vc.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
+        self.present(vc, animated: false, completion: nil)
     }
     
     //MARK: - Events
@@ -200,34 +186,8 @@ class MainListVC: UIViewController {
         showMovies()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-//        testBadZone()
-    }
-    
-    func testBadZone() {
-        let view = UnavailableZoneAlertView(pickupLocation: "test")
-        view.show()
-    }
-    
     func onTapActorsButton() {
         showActors()
-    }
-    
-    var opened = false
-    
-    func testTop() {
-        
-        if !opened {
-            NoLocationServicesView.show()
-            opened = true
-        } else {
-            NoLocationServicesView.hide()
-            opened = false
-        }
-        
-        
     }
 }
 

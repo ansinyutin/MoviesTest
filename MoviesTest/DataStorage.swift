@@ -185,7 +185,4 @@ class DataStorage {
             "image": "actor_movies_15"
         ]
     ]
-    
-    
-    let actorBiography = "asdf;ljas;dlfjas;lkdf jal;skj dfalsd fjlas djfl;asdj fal;sdjf al;s a;lsdkfj adf asdf asdf asf asf asdf asdf asdf as "
 }

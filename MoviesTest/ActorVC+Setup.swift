@@ -129,7 +129,6 @@ extension ActorVC {
     func setupEvents() {
         
         self.panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(onPan))
-//        self.panRecognizer = ImmediatePanGestureRecognizer(target: self, action: #selector(onPan))
         self.view.addGestureRecognizer(self.panRecognizer)
         
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(onTap))

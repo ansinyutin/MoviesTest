@@ -20,7 +20,7 @@ extension ActorVC {
             "moviesWidth": 260,
             "fansWidth": 260,
             "rateWidth": 260,
-            "detailHeight": view.frame.size.height - 20,
+            "detailHeight": detailHeight,
         ]
         
         let views: [String:UIView] = [
@@ -122,8 +122,6 @@ extension ActorVC {
         
         //Vertical layout
         
-        
-        //TODO delete
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[detail(detailHeight)]",
                                                            options: [],
                                                            metrics: metrics,
@@ -217,11 +215,6 @@ extension ActorVC {
                                                     attribute: .top,
                                                     multiplier: 1.0,
                                                     constant: view.frame.size.height)
-        //                                                    constant: -(view.frame.size.height + ActorVCAnimation.detailYFrom))
         view.addConstraint(constDetailTop)
-        
-        
     }
-
-    
 }

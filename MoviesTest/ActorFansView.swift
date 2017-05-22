@@ -9,7 +9,7 @@
 import UIKit
 
 
-class ActorsFansView: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate {
+class ActorsFansView: UIView {
     
     
     var fansCountLabel = UILabel(frame: .zero)
@@ -83,23 +83,6 @@ class ActorsFansView: UIView, UICollectionViewDataSource, UICollectionViewDelega
         
     }
     
-    func setupWith(fans:[Fan], maxCellsCount: Int) {
-        
-        self.data = fans
-        self.maxCellsCount = maxCellsCount
-        self.checkIfMaxCellsCountExceeded()
-        
-        self.fansCountLabel.text = "\(fans.count) fans".uppercased()
-        self.fansCountLabel.addTextSpacing(1)
-    }
-    
-    func checkIfMaxCellsCountExceeded() {
-        
-        if self.data.count > self.maxCellsCount {
-            self.isMaxCellsCountExceeded = true
-        }
-    }
-    
     func addCustomConstraints() {
         
         let metrics = [String:Any]()
@@ -148,68 +131,27 @@ class ActorsFansView: UIView, UICollectionViewDataSource, UICollectionViewDelega
         
     }
     
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
+    //MARK:- Actions
+    
+    func setupWith(fans:[Fan], maxCellsCount: Int) {
         
-        return 1
+        self.data = fans
+        self.maxCellsCount = maxCellsCount
+        self.checkIfMaxCellsCountExceeded()
+        
+        self.fansCountLabel.text = "\(fans.count) fans".uppercased()
+        self.fansCountLabel.addTextSpacing(1)
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.cellsCount
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
-    {
-        let index = indexPath.row
+    func checkIfMaxCellsCountExceeded() {
         
-        let dataItem = self.data[index]
-        
-        var cell:UICollectionViewCell
-        
-        if isMaxCellsCountExceeded  && index == (maxCellsCount - 1) {
-            
-            let moreFansCell = collectionView.dequeueReusableCell(withReuseIdentifier: self.moreFansReuseId, for: indexPath) as! ActorFansCollectionViewMoreFansCell
-            
-            moreFansCell.setupWith(moreFansCount: self.moreFansCount)
-            
-            cell = moreFansCell
-            
-        } else {
-            
-            let image = UIImage(named:dataItem.image)!
-            
-            let defaultCell = collectionView.dequeueReusableCell(withReuseIdentifier: self.defaultCellReuseId, for: indexPath) as! ActorFansCollectionViewCell
-
-            defaultCell.setupWith(image: image, imageSize: cellSize)
-            
-            cell = defaultCell
+        if self.data.count > self.maxCellsCount {
+            self.isMaxCellsCountExceeded = true
         }
-        
-        return cell
     }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        return cellSize
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-
-        let totalCellWidth:CGFloat = cellSize.width * CGFloat(self.cellsCount)
-        let totalSpacingWidth:CGFloat = CGFloat(5 * (self.cellsCount - 1))
-        
-        let halfParentWidth = collectionView.frame.width / 2
-        let contentWidth = totalCellWidth + totalSpacingWidth
-        let halfContentWidth = contentWidth / 2
-        
-        let leftInset = halfParentWidth - halfContentWidth
-        
-        return UIEdgeInsetsMake(0, leftInset, 0, 0)
-    }
-    
+   
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    
 }

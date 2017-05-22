@@ -29,15 +29,13 @@ class ActorCell: UICollectionViewCell {
     
     
     func setup() {
-        
-        
+
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.textAlignment = .center
         titleLabel.textColor = UIColor.moviesBlack
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.semiboldFontOfSize(12)
-        
-        
+
         contentView.addSubview(titleLabel)
         
         
@@ -52,8 +50,6 @@ class ActorCell: UICollectionViewCell {
         if let win = UIApplication.shared.keyWindow {
             imageView.layer.rasterizationScale = win.screen.scale
         }
-        
-        
         
         contentView.addSubview(imageView)
         self.backgroundColor = UIColor.clear

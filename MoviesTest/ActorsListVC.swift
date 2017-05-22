@@ -12,7 +12,7 @@ import UIKit
     func actorSelected(index: Int)
 }
 
-class ActorsListVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate {
+class ActorsListVC: UIViewController {
     
     weak var delegate:ActorsListVCDelegate?
     
@@ -39,18 +39,14 @@ class ActorsListVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.view.addGradientLayerWithColors(colors: [UIColor(rgba: "#fbfbfb"), .white])
     }
     
     override func loadView() {
         super.loadView()
         
         setup()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        self.view.addGradientLayerWithColors(colors: [UIColor(rgba: "#fbfbfb"), .white])
     }
     
     func setup() {
@@ -72,7 +68,6 @@ class ActorsListVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         self.view.addSubview(list)
         
         addCustomConstraints()
-        
     }    
     
     func addCustomConstraints() {
@@ -97,38 +92,4 @@ class ActorsListVC: UIViewController, UICollectionViewDataSource, UICollectionVi
                                                            metrics: metrics,
                                                            views: views))
     }
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
-        return data.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
-    {
-        let dataItem = self.data[indexPath.row]
-        
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "actorCell", for: indexPath) as! ActorCell
-        
-        let imageName = dataItem["image"]!
-        let image = UIImage(named:imageName)!
-        
-        cell.setupWith(image: image, title: dataItem["name"]!)
-        
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        return CGSize(width: 120, height: 180)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegate?.actorSelected(index: indexPath.row)
-    }
-    
 }

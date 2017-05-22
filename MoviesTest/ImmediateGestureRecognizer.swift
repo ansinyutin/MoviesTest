@@ -16,15 +16,4 @@ class ImmediatePanGestureRecognizer: UIPanGestureRecognizer {
         super.touchesBegan(touches, with: event)
         self.state = .began;
     }
-
-//    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent) {
-//        
-//        let velocity = self.velocity(in: self.view)
-//        
-//        if (self.state == .ended) {
-//            return
-//        }
-//        super.touchesEnded(touches, with: event)(touches, with: event)
-//        self.state = .began;
-//    }
 }

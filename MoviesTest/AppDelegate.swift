@@ -20,17 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             window?.backgroundColor = UIColor.white
         }
         
-        
-        
-//        let vc = MainListVC()
-//        let nvc = UINavigationController(rootViewController: vc)
-        
-//        vc.view.frame = window!.frame
-        
-//        window!.translatesAutoresizingMaskIntoConstraints = false
-//        window!.rootViewController = nvc
         window!.rootViewController = MainListVC()
-//        window!.rootViewController = getActorVC()
         window!.makeKeyAndVisible()
         
         setupInjection()
@@ -47,12 +37,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     @objc func onInjection() {
         
-        print("injected")
-        
-//        let vc = MainListVC()
-//        let nvc = UINavigationController(rootViewController: vc)
         let vc = getActorVC()
-        
         self.window?.rootViewController = vc
     }
     

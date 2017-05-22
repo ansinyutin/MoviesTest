@@ -12,7 +12,7 @@ import UIKit
     func moviesSelected(index: Int)
 }
 
-class MoviesListVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate {
+class MoviesListVC: UIViewController {
     
     weak var delegate:MoviesListVCDelegate?
     
@@ -97,44 +97,5 @@ class MoviesListVC: UIViewController, UICollectionViewDataSource, UICollectionVi
                                                            options: [],
                                                            metrics: metrics,
                                                            views: views))
-    }
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
-        return data.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
-    {
-        let dataItem = self.data[indexPath.row]
-        
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "movieCell", for: indexPath) as! MovieCell
-        
-        let imageName = dataItem["image"]!
-        let image = UIImage(named:imageName)!
-        
-        cell.setupWith(image: image, title: dataItem["title"]!, subtitle: dataItem["year"]!)
-        
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        return  CGSize(width: 130, height: 250)
-    }
-//    
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-//        
-//        return UIEdgeInsets(top: 37, left: 20, bottom: 30, right: 20)
-//    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegate?.moviesSelected(index: indexPath.row)
-    }
-    
+    }    
 }
