@@ -22,14 +22,11 @@ extension ActorDetailsVC: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
     {
-        let dataItem = self.data[indexPath.row]
+        let dataItem = data[indexPath.row]
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.reuseIdForMoviesItem, for: indexPath) as! ActorDetailCollectionViewCell
         
-        let imageName = dataItem["image"]!
-        let image = UIImage(named:imageName)!
-        
-        cell.setupWith(image: image, imageSize: listItemSize)
+        cell.setupWith(image: dataItem.image, imageSize: listItemSize)
         
         return cell
     }

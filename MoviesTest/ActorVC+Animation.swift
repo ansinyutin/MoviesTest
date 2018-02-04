@@ -13,7 +13,7 @@ extension ActorVC {
     
     //MARK:- ShowVC animation
     
-    func animateVCShow() {
+    func animateVCShow(onComplete:(()->())? = nil) {
         
         let photoY = getShowVCConstAnimation(from: self.view.frame.size.height, to: ActorVCAnimation.photoTop)
         let detailY = getShowVCConstAnimation(from: self.view.frame.size.height, to: maxDetailTopOffset)
@@ -30,6 +30,10 @@ extension ActorVC {
         
         self.view.pop_add(bgColor, forKey: "actor.vcshow.photo.bgcolor")
         
+        
+        bgColor.completionBlock = { (anim:POPAnimation?, finished:Bool) in
+            onComplete?()
+        }
         
         self.constPhotoTop.pop_add(photoY, forKey: "actor.vcshow.photo.y")
         self.constDetailTop.pop_add(detailY, forKey: "actor.vcshow.detail.y")
@@ -52,7 +56,7 @@ extension ActorVC {
         self.rateSubtitleLabel.pop_add(textAlpha, forKey: "actor.vcshow.rating_subtitle.alpha")
     }
     
-    func animateVCHide() {
+    func animateVCHide(onComplete:(()->())? = nil) {
         
         let photoY = getHideVCConstAnimation(from: ActorVCAnimation.photoTop, to: self.view.frame.size.height)
         let detailY = getHideVCConstAnimation(from: maxDetailTopOffset, to: self.view.frame.size.height)
@@ -63,9 +67,13 @@ extension ActorVC {
         let fansY = getHideVCConstAnimation(from: ActorVCAnimation.bottomBlockYMid, to: ActorVCAnimation.fansYMax)
         let ratingY = getHideVCConstAnimation(from: ActorVCAnimation.bottomBlockYMid, to: ActorVCAnimation.ratingYMax)
         
-        let textAlpha = getVCAnimation(from: 1, to: 0, property: kPOPViewAlpha, duration: 0.1)
+        let textAlpha = getVCAnimation(from: 1, to: 0, property: kPOPViewAlpha, duration: ActorVCAnimation.vcHideDuration)
         
-        let bgColor = getVCAnimation(from: UIColor.black, to: UIColor.clear, property: kPOPViewBackgroundColor, duration: 0.1)
+        let bgColor = getVCAnimation(from: UIColor.black, to: UIColor.clear, property: kPOPViewBackgroundColor, duration: ActorVCAnimation.vcHideDuration)
+        
+        bgColor.completionBlock = { (anim:POPAnimation?, finished:Bool) in
+            onComplete?()
+        }
         
         self.view.pop_add(bgColor, forKey: "actor.vcshow.photo.bgcolor")
         
@@ -104,11 +112,13 @@ extension ActorVC {
     }
     
     func getHideVCAlphaAnimation(from:CGFloat, to: CGFloat) -> POPBasicAnimation {
-        return getShowVCAnimation(from: from, to: to, property: kPOPViewAlpha)
+        return getHideVCAnimation(from: from, to: to, property: kPOPViewAlpha)
     }
+    
     func getHideVCConstAnimation(from:CGFloat, to: CGFloat) -> POPBasicAnimation {
-        return getShowVCAnimation(from: from, to: to, property: kPOPLayoutConstraintConstant)
+        return getHideVCAnimation(from: from, to: to, property: kPOPLayoutConstraintConstant)
     }
+    
     func getHideVCAnimation(from:CGFloat, to: CGFloat, property:String) -> POPBasicAnimation {
         return getVCAnimation(from: from, to: to, property: property, duration: ActorVCAnimation.vcHideDuration)
     }
@@ -145,7 +155,7 @@ extension ActorVC {
             updatePanAnimationItems()
         }
         
-        printStats()
+//        printStats()
     }
     
     func updatePanAnimationItems() {
@@ -155,8 +165,6 @@ extension ActorVC {
         updateActorZoom()
         updateTextPanOffset()
         updateDetailInternals()
-        
-        printStats()
     }
     
     func updateDetailTopOffset() {
@@ -229,11 +237,13 @@ extension ActorVC {
     func topOffsetAnimatablePropertyInitializer(prop: POPMutableAnimatableProperty?) {
         
         prop?.readBlock = { objc, values in
+//            print("readTop: \((objc as! ActorVC).topOffset)")
             values?[0] = (objc as! ActorVC).topOffset
         }
         
         prop?.writeBlock = { obj, values in
             (obj as! ActorVC).topOffset = values![0]
+//            print("writeTop: \(values![0])")
         }
     }
     

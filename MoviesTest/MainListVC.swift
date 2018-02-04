@@ -21,6 +21,8 @@ class MainListVC: UIViewController {
     let moviesButton = NavBarButton(title: "Movies")
     let actorsButton = NavBarButton(title: "Persons")
     
+    let animator = ActorDetailAnimator()
+    
     var filter:String = ""
     
     override func viewDidLoad() {
@@ -43,7 +45,7 @@ class MainListVC: UIViewController {
         
         addCustomConstraints()
         
-        showMovies()
+//        showMovies()
     }
     
     func setupSubviews() {
@@ -54,16 +56,19 @@ class MainListVC: UIViewController {
         self.view.addSubview(searchBar)
     
         
-        navBar = NavBar(buttons: [moviesButton, actorsButton])
+        navBar = NavBar(buttons: [
+//            moviesButton,
+            actorsButton
+        ])
         navBar.translatesAutoresizingMaskIntoConstraints = false
         navBar.backgroundColor = UIColor.black.withAlphaComponent(0.02)
         self.view.addSubview(navBar)
         
        
-        self.addChildViewController(moviesVC)
-        moviesVC.view.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(moviesVC.view)
-        moviesVC.didMove(toParentViewController: self)
+//        self.addChildViewController(moviesVC)
+//        moviesVC.view.translatesAutoresizingMaskIntoConstraints = false
+//        self.view.addSubview(moviesVC.view)
+//        moviesVC.didMove(toParentViewController: self)
         
         
         self.addChildViewController(actorsVC)
@@ -74,7 +79,7 @@ class MainListVC: UIViewController {
     }
     
     func setupEvents() {
-        moviesButton.addTarget(self, action: #selector(onTapMoviesButton), for: .touchUpInside)
+//        moviesButton.addTarget(self, action: #selector(onTapMoviesButton), for: .touchUpInside)
         actorsButton.addTarget(self, action: #selector(onTapActorsButton), for: .touchUpInside)
     }
     
@@ -88,7 +93,7 @@ class MainListVC: UIViewController {
         let views: [String:UIView] = [
             "search": searchBar,
             "nav": navBar,
-            "movies": moviesVC.view,
+//            "movies": moviesVC.view,
             "actors": actorsVC.view,
         ]
         
@@ -104,10 +109,10 @@ class MainListVC: UIViewController {
                                                            metrics: metrics,
                                                            views: views))
 
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|-0-[movies]-0-|",
-                                                           options: [],
-                                                           metrics: metrics,
-                                                           views: views))
+//        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|-0-[movies]-0-|",
+//                                                           options: [],
+//                                                           metrics: metrics,
+//                                                           views: views))
         
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|-0-[actors]-0-|",
                                                            options: [],
@@ -126,18 +131,18 @@ class MainListVC: UIViewController {
                                                            metrics: metrics,
                                                            views: views))
         
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[movies(listHeight)]",
-                                                           options: [],
-                                                           metrics: metrics,
-                                                           views: views))
+//        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[movies(listHeight)]",
+//                                                           options: [],
+//                                                           metrics: metrics,
+//                                                           views: views))
         
-        view.addConstraint(NSLayoutConstraint(item: moviesVC.view,
-                                              attribute: .top,
-                                              relatedBy: .equal,
-                                              toItem: navBar,
-                                              attribute: .bottom,
-                                              multiplier: 1.0,
-                                              constant: 0))
+//        view.addConstraint(NSLayoutConstraint(item: moviesVC.view,
+//                                              attribute: .top,
+//                                              relatedBy: .equal,
+//                                              toItem: navBar,
+//                                              attribute: .bottom,
+//                                              multiplier: 1.0,
+//                                              constant: 0))
         
         view.addConstraint(NSLayoutConstraint(item: actorsVC.view,
                                               attribute: .top,
@@ -152,19 +157,19 @@ class MainListVC: UIViewController {
     //MARK: - Actions
     
     func showMovies() {
-        moviesVC.view.isHidden = false
+//        moviesVC.view.isHidden = false
         actorsVC.view.isHidden = true
         
         actorsButton.isSelected = false
-        moviesButton.isSelected = true
+//        moviesButton.isSelected = true
     }
     
     func showActors() {
-        moviesVC.view.isHidden = true
+//        moviesVC.view.isHidden = true
         actorsVC.view.isHidden = false
         
         actorsButton.isSelected = true
-        moviesButton.isSelected = false
+//        moviesButton.isSelected = false
     }
     
     func showActorDetail() {
@@ -176,8 +181,9 @@ class MainListVC: UIViewController {
                           fans: 89,
                           rate: 7.3)
         
-        vc.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
-        self.present(vc, animated: false, completion: nil)
+        
+        vc.transitioningDelegate = self
+        present(vc, animated: true, completion: nil)
     }
     
     //MARK: - Events
@@ -197,3 +203,21 @@ extension MainListVC: ActorsListVCDelegate {
         showActorDetail()
     }
 }
+
+extension MainListVC: UIViewControllerTransitioningDelegate {
+    
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+//        transition.originFrame = selectedImage!.superview!.convert(selectedImage!.frame, to: nil)
+        
+        animator.presenting = true
+//        selectedImage!.isHidden = true
+        
+        return animator
+    }
+    
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        animator.presenting = false
+        return animator
+    }
+}
+

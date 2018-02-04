@@ -25,7 +25,7 @@ extension ActorVC {
     func onPanBegin() {
         
         self.pop_removeAllAnimations()
-        printStats()
+//        printStats()
         
         resetPreviousPoint()
     }
@@ -55,7 +55,7 @@ extension ActorVC {
         
         updatePanAnimationItems()
         
-        printStats()
+//        printStats()
         
         updatePreviousPoint()
     }

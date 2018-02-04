@@ -49,6 +49,8 @@
 		498A4F791E8A97AE00158571 /* ProximaNova-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 498A4F6B1E8A978400158571 /* ProximaNova-Regular.otf */; };
 		498A4F7A1E8A97AE00158571 /* ProximaNova-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 498A4F6C1E8A978400158571 /* ProximaNova-Semibold.otf */; };
 		498A4F7B1E8A97AE00158571 /* ProximaNova-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 498A4F6D1E8A978400158571 /* ProximaNova-Thin.otf */; };
+		49B81DA32024D76D00EFA6C7 /* UScreen+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B81DA22024D76D00EFA6C7 /* UScreen+Custom.swift */; };
+		49B81DA92025ED9B00EFA6C7 /* ActorDetailAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B81DA82025ED9B00EFA6C7 /* ActorDetailAnimator.swift */; };
 		49DD23FE1E89B46A00482771 /* MovieCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49DD23FD1E89B46A00482771 /* MovieCell.swift */; };
 		49DD24001E89BADF00482771 /* ActorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49DD23FF1E89BADF00482771 /* ActorCell.swift */; };
 		49DD24021E89BF3600482771 /* ActorsListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49DD24011E89BF3600482771 /* ActorsListVC.swift */; };
@@ -103,6 +105,8 @@
 		498A4F6B1E8A978400158571 /* ProximaNova-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ProximaNova-Regular.otf"; sourceTree = "<group>"; };
 		498A4F6C1E8A978400158571 /* ProximaNova-Semibold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ProximaNova-Semibold.otf"; sourceTree = "<group>"; };
 		498A4F6D1E8A978400158571 /* ProximaNova-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ProximaNova-Thin.otf"; sourceTree = "<group>"; };
+		49B81DA22024D76D00EFA6C7 /* UScreen+Custom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UScreen+Custom.swift"; sourceTree = "<group>"; };
+		49B81DA82025ED9B00EFA6C7 /* ActorDetailAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActorDetailAnimator.swift; sourceTree = "<group>"; };
 		49DD23FD1E89B46A00482771 /* MovieCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieCell.swift; sourceTree = "<group>"; };
 		49DD23FF1E89BADF00482771 /* ActorCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActorCell.swift; sourceTree = "<group>"; };
 		49DD24011E89BF3600482771 /* ActorsListVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActorsListVC.swift; sourceTree = "<group>"; };
@@ -196,6 +200,7 @@
 		49596A321E85A5F4004C5F27 /* MoviesTest */ = {
 			isa = PBXGroup;
 			children = (
+				49B81DA72025ED8200EFA6C7 /* Animators */,
 				498A4F661E8A978400158571 /* Fonts */,
 				498A4E571E8A59BA00158571 /* Common */,
 				4906310B1E8BABB0003E30CA /* ActorDetail */,
@@ -203,7 +208,7 @@
 				498A4E611E8A78EE00158571 /* MoviesList */,
 				49DD23FA1E89B45300482771 /* List */,
 				49596A331E85A5F4004C5F27 /* AppDelegate.swift */,
-				498A4E4F1E8A4B1E00158571 /* DataStorage.swift */,
+				49B81DA42024E27F00EFA6C7 /* Data */,
 				49596A3A1E85A5F4004C5F27 /* Assets.xcassets */,
 				49596A3C1E85A5F4004C5F27 /* LaunchScreen.storyboard */,
 				49596A3F1E85A5F4004C5F27 /* Info.plist */,
@@ -223,6 +228,7 @@
 				496618081ECA2E980013D8F5 /* ImmediateGestureRecognizer.swift */,
 				4966180A1ECAE6970013D8F5 /* UIImage+Custom.swift */,
 				4900F64F1ECE1E0D0035B417 /* Animation.swift */,
+				49B81DA22024D76D00EFA6C7 /* UScreen+Custom.swift */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -276,6 +282,22 @@
 				09E84C7ACD33F048470DB878 /* Pods_MoviesTest.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		49B81DA42024E27F00EFA6C7 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				498A4E4F1E8A4B1E00158571 /* DataStorage.swift */,
+			);
+			name = Data;
+			sourceTree = "<group>";
+		};
+		49B81DA72025ED8200EFA6C7 /* Animators */ = {
+			isa = PBXGroup;
+			children = (
+				49B81DA82025ED9B00EFA6C7 /* ActorDetailAnimator.swift */,
+			);
+			name = Animators;
 			sourceTree = "<group>";
 		};
 		49DD23FA1E89B45300482771 /* List */ = {
@@ -332,7 +354,7 @@
 				TargetAttributes = {
 					49596A2F1E85A5F4004C5F27 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = 68WQU74YD5;
+						DevelopmentTeam = KEQ26ZUV6L;
 						LastSwiftMigration = 0820;
 						ProvisioningStyle = Automatic;
 					};
@@ -429,6 +451,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4906310A1E8BA04F003E30CA /* UIView+Custom.swift in Sources */,
+				49B81DA92025ED9B00EFA6C7 /* ActorDetailAnimator.swift in Sources */,
 				4906312A1E8CCD5B003E30CA /* ActorFansCollectionViewMoreFansCell.swift in Sources */,
 				495514B11ED2CA02000FC0C2 /* MoviesListVC+CollectionView.swift in Sources */,
 				49DD24041E89BF4200482771 /* MainListVC.swift in Sources */,
@@ -438,6 +461,7 @@
 				4906312D1E8D2C7F003E30CA /* ActorDetailsHeaderView.swift in Sources */,
 				4966180B1ECAE6970013D8F5 /* UIImage+Custom.swift in Sources */,
 				495514AF1ED2BCD3000FC0C2 /* ActorsListVC+CollectionView.swift in Sources */,
+				49B81DA32024D76D00EFA6C7 /* UScreen+Custom.swift in Sources */,
 				498A4E601E8A744500158571 /* TextField.swift in Sources */,
 				4906311B1E8C4AF8003E30CA /* ActorDetailsVC.swift in Sources */,
 				4906310D1E8BABC2003E30CA /* ActorVC.swift in Sources */,
@@ -582,11 +606,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 68WQU74YD5;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = KEQ26ZUV6L;
 				INFOPLIST_FILE = MoviesTest/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = test.MoviesTest;
+				PRODUCT_BUNDLE_IDENTIFIER = advantum.MoviesTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -602,12 +627,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 68WQU74YD5;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = KEQ26ZUV6L;
 				INFOPLIST_FILE = MoviesTest/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = test.MoviesTest;
+				PRODUCT_BUNDLE_IDENTIFIER = advantum.MoviesTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;

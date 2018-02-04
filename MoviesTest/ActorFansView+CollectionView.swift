@@ -37,11 +37,9 @@ extension ActorsFansView:UICollectionViewDataSource, UICollectionViewDelegate {
             
         } else {
             
-            let image = UIImage(named:dataItem.image)!
-            
             let defaultCell = collectionView.dequeueReusableCell(withReuseIdentifier: self.defaultCellReuseId, for: indexPath) as! ActorFansCollectionViewCell
             
-            defaultCell.setupWith(image: image, imageSize: cellSize)
+            defaultCell.setupWith(image: dataItem.image, imageSize: cellSize)
             
             cell = defaultCell
         }

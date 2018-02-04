@@ -22,20 +22,20 @@ class ActorFansCollectionViewCell: UICollectionViewCell {
     }
     
     func setupWith(image: UIImage, imageSize:CGSize) {
-        self.imageView.image =
-            UIImage.roundedRectImageFromImage(image: image,
-                                              imageSize: imageSize,
-                                              cornerRadius: self.bounds.size.width / 2)
+        self.imageView.image = image
+//            UIImage.roundedRectImageFromImage(image: image,
+//                                              imageSize: imageSize,
+//                                              cornerRadius: self.bounds.size.width / 2)
     }
     
     func setup() {
         
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.layer.cornerRadius = self.bounds.size.width / 2
-        imageView.contentMode = .scaleAspectFit
-        imageView.layer.masksToBounds = true
-        imageView.layer.drawsAsynchronously = true
-        imageView.layer.shouldRasterize = true
+//        imageView.layer.cornerRadius = self.bounds.size.width / 2
+//        imageView.contentMode = .scaleAspectFit
+//        imageView.layer.masksToBounds = true
+//        imageView.layer.drawsAsynchronously = true
+//        imageView.layer.shouldRasterize = true
         
         if let win = UIApplication.shared.keyWindow {
             imageView.layer.rasterizationScale = win.screen.scale

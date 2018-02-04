@@ -24,7 +24,7 @@ class ActorsListVC: UIViewController {
             "image": "persons_item_1"
         ],
         [
-            "name": "Christine Grant",
+            "name": "Willem Dafoe",
             "image": "persons_item_2"
         ],
         [

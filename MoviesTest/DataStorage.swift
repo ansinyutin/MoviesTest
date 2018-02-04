@@ -6,7 +6,7 @@
 //  Copyright © 2017 Синютин Андрей. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 struct Actor {
     var name = ""
@@ -25,13 +25,13 @@ struct Actor {
 struct Movie {
     var title = ""
     var year = ""
-    var image = ""
+    var image = UIImage()
 }
 
 
 struct Fan {
     var name = ""
-    var image = ""
+    var image = UIImage()
 }
 
 class DataStorage {
@@ -61,33 +61,39 @@ class DataStorage {
         var result = [Fan]()
         
         for i in 1..<fansCount {
+            
+            let image = UIImage(named: "fans_\((i%5)+1)")!
+            
             var fan = Fan()
             fan.name = "fan \(i)"
-            fan.image = "fans_\(i)"
+            fan.image = UIImage.roundedRectImageFromImage(image: image,
+                                                          imageSize: image.size,
+                                                          cornerRadius: image.size.width / 2)
+                
             result.append(fan)
         }
         
         return result
     }
     
-    
-    let movies:[Dictionary<String,String>] = [
-        [
-            "title": "Moonlight",
-            "year": "2017",
-            "image": "movies_item_1"
-        ],
-        [
-            "title": "Deadpool",
-            "year": "2017",
-            "image": "movies_item_2"
-        ],
-        [
-            "title": "Mozart in the Jungle",
-            "year": "2009",
-            "image": "movies_item_3"
-        ]
-    ]
+//
+//    let movies:[Dictionary<String,String>] = [
+//        [
+//            "title": "Moonlight",
+//            "year": "2017",
+//            "image": "movies_item_1"
+//        ],
+//        [
+//            "title": "Deadpool",
+//            "year": "2017",
+//            "image": "movies_item_2"
+//        ],
+//        [
+//            "title": "Mozart in the Jungle",
+//            "year": "2009",
+//            "image": "movies_item_3"
+//        ]
+//    ]
     
     let actors:[Dictionary<String,String>] = [
         [
@@ -183,6 +189,103 @@ class DataStorage {
             "title": "Mozart in the Jungle",
             "year": "2009",
             "image": "actor_movies_15"
+        ],
+        [
+            "title": "La La Land",
+            "year": "2007",
+            "image": "actor_movies_1"
+        ],
+        [
+            "title": "Deadpool",
+            "year": "2007",
+            "image": "actor_movies_2"
+        ],
+        [
+            "title": "Mozart in the Jungle",
+            "year": "2009",
+            "image": "actor_movies_3"
+        ],
+        [
+            "title": "La La Land",
+            "year": "2007",
+            "image": "actor_movies_4"
+        ],
+        [
+            "title": "Deadpool",
+            "year": "2007",
+            "image": "actor_movies_5"
+        ],
+        [
+            "title": "Mozart in the Jungle",
+            "year": "2009",
+            "image": "actor_movies_6"
+        ],
+        [
+            "title": "La La Land",
+            "year": "2007",
+            "image": "actor_movies_7"
+        ],
+        [
+            "title": "Deadpool",
+            "year": "2007",
+            "image": "actor_movies_8"
+        ],
+        [
+            "title": "Mozart in the Jungle",
+            "year": "2009",
+            "image": "actor_movies_9"
+        ],
+        [
+            "title": "La La Land",
+            "year": "2007",
+            "image": "actor_movies_10"
+        ],
+        [
+            "title": "Deadpool",
+            "year": "2007",
+            "image": "actor_movies_11"
+        ],
+        [
+            "title": "Mozart in the Jungle",
+            "year": "2009",
+            "image": "actor_movies_12"
+        ],
+        [
+            "title": "La La Land",
+            "year": "2007",
+            "image": "actor_movies_13"
+        ],
+        [
+            "title": "Deadpool",
+            "year": "2007",
+            "image": "actor_movies_14"
+        ],
+        [
+            "title": "Mozart in the Jungle",
+            "year": "2009",
+            "image": "actor_movies_15"
         ]
     ]
+    
+    lazy var movies:[Movie] = {
+        
+        var arr = [Movie]()
+        
+        var size = UIScreen.isiPhone4or5() ? CGSize(width: 80, height: 120) : CGSize(width: 100, height: 150)
+        
+        for dict in self.actorMovies {
+            
+            let image = UIImage(named: dict["image"]!)!
+            var movie = Movie()
+            movie.title = dict["title"]!
+            movie.year = dict["year"]!
+            movie.image = UIImage.roundedRectImageFromImage(image: image,
+                                                            imageSize: size,
+                                                            cornerRadius: 5)
+
+            arr.append(movie)
+        }
+        
+        return arr
+    }()
 }

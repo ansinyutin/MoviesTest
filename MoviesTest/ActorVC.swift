@@ -27,8 +27,8 @@ struct ActorVCAnimation {
     static let photoTop:CGFloat = 43
     
     static let vcShowCATiming = CAMediaTimingFunction(controlPoints: 0, 0, 0.38, 1)
-    static let vcShowDuration:Double = 0.5
-    static let vcHideDuration:Double = 0.2
+    static let vcShowDuration:Double = 1.0 //0.5
+    static let vcHideDuration:Double = 1.0 //0.2
 }
 
 struct ActorVCFrames {
@@ -90,6 +90,7 @@ class ActorVC: UIViewController {
     //MARK: Recognizers
     
     var panRecognizer:UIPanGestureRecognizer!
+    var tapRecognizer:UITapGestureRecognizer!
     
     
     //MARK: Scroll
@@ -166,17 +167,17 @@ class ActorVC: UIViewController {
         topOffset = maxDetailTopOffset
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        animateVCShow()
-    }
-    
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//
+//        animateVCShow()
+//    }
+//
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        animateVCHide()
+//        animateVCHide() //TODO custom VC transition
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -189,8 +190,9 @@ class ActorVC: UIViewController {
         
         print(
             "offset: \(String(format: "%000.1f", topOffset))\t" +
-            "main: \(String(format: "%.1f", mainOffset))\t" +
             "extra: \(String(format: "%.1f", extraOffset))\t" +
+//            "delta: \(String(format: "%000.1f", verticalPanDelta))\t" +
+            "main: \(String(format: "%.1f", mainOffset))\t" +
             "overall: \(String(format: "%.1f", minOverallOffset))\t" +
             "open: \(String(format: "%.2f", openProgress))\t" +
             "Dopen: \(String(format: "%.2f", getDetailOpenProgress()))\t" +

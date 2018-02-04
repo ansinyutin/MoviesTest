@@ -81,8 +81,6 @@ extension ActorVC {
         self.view.addSubview(rateStarImageView)
         
         
-        
-//        detailVC.panDelegate = self
         detailVC.view.translatesAutoresizingMaskIntoConstraints = false
         detailVC.view.backgroundColor = .white
         self.addChildViewController(detailVC)
@@ -128,11 +126,12 @@ extension ActorVC {
     
     func setupEvents() {
         
-        self.panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(onPan))
-        self.view.addGestureRecognizer(self.panRecognizer)
+        panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(onPan))
+        view.addGestureRecognizer(panRecognizer)
         
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(onTap))
-        self.view.addGestureRecognizer(tapRecognizer)
+        tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(onTap))
+        photoImageView.addGestureRecognizer(tapRecognizer)
+        photoImageView.isUserInteractionEnabled = true
     }
     
     func onTap(recognizer:UITapGestureRecognizer) {

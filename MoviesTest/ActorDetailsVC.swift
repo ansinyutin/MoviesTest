@@ -80,9 +80,11 @@ class ActorDetailsVC: UIViewController {
     var list:UICollectionView!
     var listHeader:UICollectionReusableView? = nil
     
-    let listItemSize = CGSize(width: 100, height: 150)
+    var listItemSize:CGSize {
+        return UIScreen.isiPhone4or5() ? CGSize(width: 80, height: 120) : CGSize(width: 100, height: 150)
+    }
     
-    let data:[Dictionary<String,String>] = DataStorage.shared.actorMovies
+    let data:[Movie] = DataStorage.shared.movies
     
     let reuseIdForMoviesHeader = "ActorDetailsMoviesHeader"
     let reuseIdForMoviesItem = "ActorDetailsMoviesItem"

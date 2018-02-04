@@ -22,10 +22,11 @@ class ActorDetailCollectionViewCell: UICollectionViewCell {
     }
     
     func setupWith(image: UIImage, imageSize:CGSize) {
-        self.imageView.image =
-            UIImage.roundedRectImageFromImage(image: image,
-                                              imageSize: imageSize,
-                                              cornerRadius: 5)
+//        backgroundColor = .gray
+        self.imageView.image = image
+//            UIImage.roundedRectImageFromImage(image: image,
+//                                              imageSize: imageSize,
+//                                              cornerRadius: 5)
     }
     
     
